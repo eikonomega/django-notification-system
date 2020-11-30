@@ -1,15 +1,10 @@
 import uuid
 
-from django.contrib.postgres.fields import JSONField
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 from django.db import models
 
-from website.abstract_models import CreatedModifiedAbstractModel
+from .abstract import CreatedModifiedAbstractModel
 from .user_target import UserTarget
-
-
-def get_default_data():
-    return {}
 
 
 class Notification(CreatedModifiedAbstractModel):
@@ -17,54 +12,48 @@ class Notification(CreatedModifiedAbstractModel):
     """
     Definition of a Notification.
 
-    Parameters
+    Attributes
     ----------
     id : UUID
         The unique UUID of the record.
     user_target : UserTarget
         The UserTarget associated with notification
     title : str
-
+        The title for the notification. Exact representation depends on the target.
+        For example, for an email notification this will be used as the subject of the email.
     body : str
-        The message to be sent.
+        The main message of the notification to be sent.
     extra : dict
-        a dictionary of extra data to be sent to Expo
-        keys must be one of the following: ['data', 'sound', 'ttl', 'expiration', 'priority', 'badge', 'channel_id']
+        A dictionary of extra data to be sent to the notification processor. Valid keys
+        are determined by each processor.
     status : CharField
-        The status of Notification.  Choices determined by enum STATUS_CHOICES
+        The status of Notification. Options are: 'SCHEDULED', 'DELIVERED', 'DELIVERY_FAILURE', 'RETRY', 'INACTIVE_DEVICE'
     scheduled_delivery : DateTimeField
         Day and time Notification is to be sent.
     attempted_delivery : DateTImeField
         Day and time attempted to deliver Notification.
-    related_object_uuid : UUID
-
     retry_time_interval : PositiveIntegerField
-        The amount of time (in minutes) used to reschedule a notification
+        If a notification fails, this is the amount of time to wait until retrying to send it.
     retry_attempts : PositiveIntegerField
         The number of retries that have been attempted.
     max_retries : PositiveIntegerField
         The max number of allowed retries.
-
-    Notes
-    -----
-    Notification is meant to strictly house the notifications that are to be
-    sent.  There is to be a daemon that will then check this table and handle
-    sending the notifications.
-
     """
 
-    SCHEDULED = "SCHEDULED"
     DELIVERED = "DELIVERED"
     DELIVERY_FAILURE = "DELIVERY FAILURE"
-    RETRY = "RETRY"
     INACTIVE_DEVICE = "INACTIVE DEVICE"
+    OPTED_OUT = "OPTED OUT"
+    RETRY = "RETRY"
+    SCHEDULED = "SCHEDULED"
 
     STATUS_CHOICES = (
-        (SCHEDULED, "Scheduled"),
         (DELIVERED, "Delivered"),
         (DELIVERY_FAILURE, "Delivery Failure"),
-        (RETRY, "Retry"),
         (INACTIVE_DEVICE, "Inactive Device"),
+        (OPTED_OUT, "Opted Out"),
+        (RETRY, "Retry"),
+        (SCHEDULED, "Scheduled"),
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -73,21 +62,23 @@ class Notification(CreatedModifiedAbstractModel):
     )
     title = models.CharField(max_length=100)
     body = models.TextField()
-    extra = JSONField(blank=True, null=True, default=get_default_data)
+    extra = models.JSONField(blank=True, null=True, default=dict)
     status = models.CharField(max_length=16, choices=STATUS_CHOICES)
     scheduled_delivery = models.DateTimeField()
     attempted_delivery = models.DateTimeField(null=True, blank=True)
-    related_object_uuid = models.CharField(
-        max_length=100, null=True, blank=True, editable=False
-    )
     retry_time_interval = models.PositiveIntegerField(default=0)
     retry_attempts = models.PositiveIntegerField(default=0)
     max_retries = models.PositiveIntegerField(default=3)
 
     class Meta:
-        db_table = "notifications_notification"
+        db_table = "notification_system_notification"
         verbose_name_plural = "Notifications"
-        unique_together = ["user_target", "scheduled_delivery", "title", "extra"]
+        unique_together = [
+            "user_target",
+            "scheduled_delivery",
+            "title",
+            "extra",
+        ]
 
     def __str__(self):
         return "{} - {} - {}".format(
@@ -95,20 +86,35 @@ class Notification(CreatedModifiedAbstractModel):
         )
 
     def clean(self):
-        if self.attempted_delivery and self.status == "SCHEDULED":
-            raise ValidationError(
-                "Status cannot be 'SCHEDULED' if there is an Attempted Delivery."
-            )
+        """
+        Perform a few data checks whenever an instance is saved.
 
-        elif not self.attempted_delivery and self.status != "SCHEDULED":
-            raise ValidationError(
-                "Attempted Delivery must be filled out if Status is {}".format(
-                    self.status
-                )
-            )
+        1. Don't allow notifications with an attempted delivery date to
+           have a status of 'SCHEDULED'.
+        2. If a notification has a status other than 'SCHEDULED' it MUST
+           have an attempted delivery date.
+        3. Don't allow notifications to be saved if the user has opted out.
+
+        Raises
+        ------
+        ValidationError
+            Will include details of what caused the validation error.
+        """
         opted_out = (
             hasattr(self.user_target.user, "notification_opt_out")
             and self.user_target.user.notification_opt_out.has_opted_out
         )
         if opted_out:
             raise ValidationError("This user has opted out of Notifications.")
+
+        if self.attempted_delivery and self.status == "SCHEDULED":
+            raise ValidationError(
+                "Status cannot be 'SCHEDULED' if there is an attempted delivery."
+            )
+
+        if self.attempted_delivery and self.status != "SCHEDULED":
+            raise ValidationError(
+                "Attempted Delivery must be filled out if Status is {}".format(
+                    self.status
+                )
+            )
