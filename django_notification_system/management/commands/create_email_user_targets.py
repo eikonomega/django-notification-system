@@ -1,10 +1,12 @@
 # TODO: Justin - will need to import User in such a way as to pick up custom user models.
 # Here, and anywhere else User is referenced.
 # https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#reusable-apps-and-auth-user-model
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
-from website.notifications.models import Target
+from ...models import Target, UserTarget
+
+User = get_user_model()
 
 
 class Command(BaseCommand):
@@ -21,11 +23,10 @@ class Command(BaseCommand):
 
         # This is being called in case this command is run before
         # the email target has been created.
-        Target.objects.get_or_create(name="Email", class_name="Email")
+        Target.objects.get_or_create(name="Email", notification_creator_module="Email")
 
         all_users = User.objects.all()
 
         for user in all_users:
-            # Calling this triggers the signal that was written which
-            # will create all new UserTargets
-            user.save()
+            # Calling this will create an email user target for each user.
+            UserTarget.reset_email_target(user)

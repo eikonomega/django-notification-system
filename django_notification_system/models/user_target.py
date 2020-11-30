@@ -66,12 +66,11 @@ class UserTarget(CreatedModifiedAbstractModel):
         user: a user
         """
         email_target, created = Target.objects.get_or_create(
-            name="Email", class_name="Email"
+            name="Email", notification_creator_module="Email"
         )
 
         with transaction.atomic():
             # using atomic so user always has a valid email
-
             # Mark all their previous emails as inactive
             UserTarget.objects.filter(
                 user=user,
@@ -81,15 +80,15 @@ class UserTarget(CreatedModifiedAbstractModel):
             UserTarget.objects.update_or_create(
                 user=user,
                 target=email_target,
-                user_target_id=user.email,
+                target_user_id=user.email,
                 defaults={
                     "active": True,
-                    "user_target_friendly_name": f"{user.first_name} {user.last_name}'s Email",
+                    "description": f"{user.first_name} {user.last_name}'s Email",
                 },
             )
         return
 
     def __str__(self):
         return "{}: {}".format(
-            self.user.username, self.user_target_friendly_name
+            self.user.username, self.description
         )
