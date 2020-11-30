@@ -24,7 +24,7 @@ You should see a newly created UserTarget for each user currently in the DB.
     :align:   center
     :scale: 25%
 
-These user targets are now available for you to send notifications to.
+These user targets are now available for all of your notification needs.
 
 
 Process Notifications
