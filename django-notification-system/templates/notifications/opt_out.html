@@ -1,0 +1,11 @@
+
+{% if has_opted_out %}
+<p> {{ email }} is currently unsubscribed from all email communications and app notifications. Click submit to resubscribe.</p>
+{% else %}
+<p>Click submit to completely unsubscribe {{ email }} from all email communications and app notifications from Workwell Reasearch.</p>
+{% endif %}
+<form action="{% url 'unsubscribe' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>

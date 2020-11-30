@@ -1,0 +1,30 @@
+{% extends "database/base.html" %}
+
+{% load staticfiles %}
+
+{% block navbar %}
+  {% include "database/navbar.html" with active_nav="notification_blaster" %}
+{% endblock %}
+
+{% block extra_css %}
+  {% block extra_css_local %}
+  {% endblock %}
+{% endblock %}
+
+{% block extra_js %}
+  {% block extra_js_local %}
+  {% endblock %}
+{% endblock %}
+
+{% block main_content %}
+  <body>
+  <h1>Notification Blaster</h1>
+  <p><b>WARNING</b>: Hitting submit will send hundreds of Expo notifications in an instant, irrevocable action.</p>
+  <form action="{% url 'notification_blaster' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+  </form>
+  </body>
+  </html>
+{% endblock %}
