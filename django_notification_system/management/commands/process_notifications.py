@@ -25,28 +25,28 @@ class Command(BaseCommand):
         """
 
         """
-        # TODO: This isn't currently working, and we'll need to add in where we want them to keep
-        # their handler functions
+        # TODO: We'll need to add in where we want them to keep their handler functions
         import django_notification_system.notification_handlers
         handler_dir = path.dirname(inspect.getfile(
             django_notification_system.notification_handlers))
+
         for handle in os.listdir(path.join(handler_dir)):
             if '__init__' in handle:
                 continue
             temp = {}
             try:
+                notification_system = handle.partition('.py')[0]
                 handler = importlib.import_module(
-                    f"django_notification_system.notification_handlers.{handle}")
-                print(getattr(handler, 'send_notification'))
+                    f"django_notification_system.notification_handlers.{notification_system}")
                 temp['send_notification'] = getattr(handler, 'send_notification')
-            except (ModuleNotFoundError, AttributeError):
+            except (ModuleNotFoundError, AttributeError) as e:
                 pass
 
-            cls.__function_table[handle.partition('.py')[0]] = temp
+            cls.__function_table[notification_system] = temp
 
     def handle(self, *args, **options):
-        print(self._load_function_table())
-        print(self.__function_table)
+        # Load the function table
+        self._load_function_table()
         # Get all SCHEDULED and RETRY notifications with a
         # scheduled_delivery before the current date_time
         notifications = Notification.objects.filter(
@@ -67,15 +67,15 @@ class Command(BaseCommand):
                 notification.status = Notification.INACTIVE_DEVICE
                 notification.save()
             else:
-                pass
-                # Dynamic imports....
-                function = notification.user_target.target.name.lower()
+                type_of_notification = notification.user_target.target.name.lower()
                 try:
-                    response_message = self.__function_table[function]['send_notification'](
+                    # Use our function table to call the appropriate sending function
+                    response_message = self.__function_table[type_of_notification]['send_notification'](
                         notification)
                 except KeyError:
                     print(
                         f'invalid notification target name {notification.user_target.target.name}')
                 else:
+                    # The notification was sent successfully
                     print(response_message)
                     print('*********************************')
