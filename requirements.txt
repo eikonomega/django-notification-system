@@ -1,2 +1,5 @@
 Django==3.1.3
 # TODO: Need to add Expo SDK, Twilio, etc
+html2text==2018.1.9
+twilio==6.29.1
+exponent_server_sdk==0.3.1          # A module used to send push notifications to Exponent Experiences
