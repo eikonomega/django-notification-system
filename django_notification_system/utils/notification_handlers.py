@@ -1,3 +1,5 @@
+# TODO: This needs to be broken out into separate modules.
+
 import logging
 
 import html2text
@@ -11,13 +13,21 @@ from django.conf import settings
 from django.utils import timezone
 from requests import HTTPError
 
-from exponent_server_sdk import PushClient, PushMessage, PushResponseError, PushServerError, DeviceNotRegisteredError, PushResponse
+from exponent_server_sdk import (
+    PushClient,
+    PushMessage,
+    PushResponseError,
+    PushServerError,
+    DeviceNotRegisteredError,
+    PushResponse,
+)
 from sentry_sdk import capture_exception
 
 from website.notifications.models import Notification
 from website.utils.logging_utils import generate_extra
 
 logger = logging.getLogger(__name__)
+
 
 def check_and_update_retry_attempts(notification, minute_interval=None):
     """
@@ -32,11 +42,14 @@ def check_and_update_retry_attempts(notification, minute_interval=None):
         if notification.max_retries != notification.retry_attempts:
             notification.status = notification.RETRY
             if minute_interval is not None:
-                notification.scheduled_delivery = timezone.now(
-                )+relativedelta(minutes=minute_interval)
+                notification.scheduled_delivery = (
+                    timezone.now() + relativedelta(minutes=minute_interval)
+                )
             else:
-                notification.scheduled_delivery = timezone.now(
-                )+relativedelta(minutes=notification.retry_time_interval)
+                notification.scheduled_delivery = (
+                    timezone.now()
+                    + relativedelta(minutes=notification.retry_time_interval)
+                )
             notification.attempted_delivery = timezone.now()
             notification.save()
 
@@ -63,8 +76,15 @@ def prepare_extra(extra: dict):
     Dictionary consisting of PushMessage() options
     """
     final_extra = {}
-    push_options = ['data', 'sound', 'ttl',
-                    'expiration', 'priority', 'badge', 'channel_id']
+    push_options = [
+        "data",
+        "sound",
+        "ttl",
+        "expiration",
+        "priority",
+        "badge",
+        "channel_id",
+    ]
     for item in push_options:
         try:
             final_extra[item] = extra[item]
@@ -93,21 +113,24 @@ def send_push_message(notification: Notification):
 
     try:
         response = PushClient().publish(
-            PushMessage(to=str(notification.user_target.user_target_id),
-                        title=notification.title,
-                        body=notification.body,
-                        data=extra['data'],
-                        sound=extra['sound'],
-                        ttl=extra['ttl'],
-                        expiration=extra['expiration'],
-                        priority=extra['priority'],
-                        badge=extra['badge'],
-                        channel_id=extra['channel_id']))
+            PushMessage(
+                to=str(notification.user_target.user_target_id),
+                title=notification.title,
+                body=notification.body,
+                data=extra["data"],
+                sound=extra["sound"],
+                ttl=extra["ttl"],
+                expiration=extra["expiration"],
+                priority=extra["priority"],
+                badge=extra["badge"],
+                channel_id=extra["channel_id"],
+            )
+        )
     except (PushServerError, HTTPError, ValueError) as e:
         check_and_update_retry_attempts(notification)
         capture_exception(e)
         logger.error("Error sending push message", exc_info=e)
-        return("{}: {}".format(type(e), e))
+        return "{}: {}".format(type(e), e)
     return handle_push_response(notification, response)
 
 
@@ -127,7 +150,7 @@ def handle_push_response(notification: Notification, response: PushResponse):
             user_target,
             extra=generate_extra(
                 user_target=user_target,
-            )
+            ),
         )
         return "{}: {}".format(type(e), e)
     except PushResponseError as e:
@@ -135,19 +158,19 @@ def handle_push_response(notification: Notification, response: PushResponse):
         capture_exception(e)
         logger.error(
             "Error validating response from push message",
-             exc_info=e,
-             extra=generate_extra(
-                 notification=notification,
-                 push_response__message=e.message,
-                 push_response=e.push_response,
-             )
-         )
+            exc_info=e,
+            extra=generate_extra(
+                notification=notification,
+                push_response__message=e.message,
+                push_response=e.push_response,
+            ),
+        )
         return "{}: {}".format(type(e), e)
     else:
         notification.status = notification.DELIVERED
         notification.attempted_delivery = timezone.now()
         notification.save()
-        return('Notification Successfully Pushed!')
+        return "Notification Successfully Pushed!"
 
 
 def send_email(notification):
@@ -171,25 +194,26 @@ def send_email(notification):
             html_message=notification.body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[notification.user_target.user_target_id],
-            fail_silently=False)
+            fail_silently=False,
+        )
 
     except SMTPException as e:
         # Update the notification to retry tomorrow if we are not at the
         # max amount of retries. SMTPEXceptions are usually the result of
         # hitting our daily limit of emails.
         check_and_update_retry_attempts(notification)
-        return('Email could not be sent: {}'.format(e))
+        return "Email could not be sent: {}".format(e)
 
     except socket.error as se:
         # Update the notification to retry in 90 minutes if we are not at the
         # max amount of retries. Socket errors are rare, sporadic and
         # inconsistent but usually resolved relatively quickly
         check_and_update_retry_attempts(notification, 90)
-        return('Email could not be sent: {}'.format(se))
+        return "Email could not be sent: {}".format(se)
 
     # If everything is fine, we update the notification
     # to DELIVERED
     notification.status = notification.DELIVERED
     notification.attempted_delivery = timezone.now()
     notification.save()
-    return('Email Successfully Sent')
+    return "Email Successfully Sent"
