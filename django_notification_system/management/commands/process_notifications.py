@@ -75,10 +75,10 @@ class Command(BaseCommand):
                 notification.status = Notification.INACTIVE_DEVICE
                 notification.save()
             else:
-                type_of_notification = notification.user_target.target.name.lower()
+                notification_type = notification.user_target.target.name.lower()
                 try:
                     # Use our function table to call the appropriate sending function
-                    response_message = self.__function_table[type_of_notification]['send_notification'](
+                    response_message = self.__function_table[notification_type]['send_notification'](
                         notification)
                 except KeyError:
                     print(
