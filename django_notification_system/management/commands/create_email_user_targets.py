@@ -23,7 +23,9 @@ class Command(BaseCommand):
 
         # This is being called in case this command is run before
         # the email target has been created.
-        Target.objects.get_or_create(name="Email", notification_creator_module="Email")
+        Target.objects.get_or_create(
+            name="Email", notification_module_name="email"
+        )
 
         all_users = User.objects.all()
 

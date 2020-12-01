@@ -66,7 +66,7 @@ class UserTarget(CreatedModifiedAbstractModel):
         user: a user
         """
         email_target, created = Target.objects.get_or_create(
-            name="Email", notification_creator_module="Email"
+            name="Email", notification_module_name="Email"
         )
 
         with transaction.atomic():
@@ -89,6 +89,4 @@ class UserTarget(CreatedModifiedAbstractModel):
         return
 
     def __str__(self):
-        return "{}: {}".format(
-            self.user.username, self.description
-        )
+        return "{}: {}".format(self.user.username, self.description)

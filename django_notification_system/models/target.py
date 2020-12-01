@@ -18,14 +18,14 @@ class Target(CreatedModifiedAbstractModel):
         The unique UUID of the record.
     name : CharField
         The human friendly name for the target.
-    notification_creator_module : str
+    notification_module_name : str
         The name of the module in the notification_creators directory which
         will be used to create notifications for this target.
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=15, unique=True)
-    notification_creator_module = models.CharField(max_length=50)
+    notification_module_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name

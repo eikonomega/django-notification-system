@@ -47,7 +47,7 @@ class OptOutAdmin(admin.ModelAdmin):
 
 @admin.register(Target)
 class TargetAdmin(admin.ModelAdmin):
-    list_display = ["name", "notification_creator_module"]
+    list_display = ["name", "notification_module_name"]
 
 
 @admin.register(UserTarget)
