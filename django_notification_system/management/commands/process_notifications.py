@@ -23,30 +23,38 @@ class Command(BaseCommand):
     @classmethod
     def _load_function_table(cls):
         """
-
+        This function will get our function table populated with all available `send_notification`
+        functions.
         """
-        # TODO: We'll need to add in where we want them to keep their handler functions
         import django_notification_system.notification_handlers
+        # Get our handler directory. NOTE: We want to add one for the functions users will create
+        # to add to our table.
         handler_dir = path.dirname(inspect.getfile(
             django_notification_system.notification_handlers))
 
         for handle in os.listdir(path.join(handler_dir)):
             if '__init__' in handle:
+                # Ignore the init file
                 continue
-            temp = {}
+
+            funcion_dict = {}
+
             try:
+                # Strip off the .py before importing the module
                 notification_system = handle.partition('.py')[0]
                 handler = importlib.import_module(
                     f"django_notification_system.notification_handlers.{notification_system}")
-                temp['send_notification'] = getattr(handler, 'send_notification')
-            except (ModuleNotFoundError, AttributeError) as e:
+                # Add the function to our function dict
+                funcion_dict['send_notification'] = getattr(handler, 'send_notification')
+            except (ModuleNotFoundError, AttributeError):
                 pass
 
-            cls.__function_table[notification_system] = temp
+            cls.__function_table[notification_system] = funcion_dict
 
     def handle(self, *args, **options):
         # Load the function table
         self._load_function_table()
+
         # Get all SCHEDULED and RETRY notifications with a
         # scheduled_delivery before the current date_time
         notifications = Notification.objects.filter(
