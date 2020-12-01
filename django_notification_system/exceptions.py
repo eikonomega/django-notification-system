@@ -7,6 +7,12 @@ class NotificationSystemError(Exception):
     pass
 
 
+class NotificationsNotCreated(NotificationSystemError):
+    """Exception to raise when one or more notifications cannot be created."""
+
+    pass
+
+
 class NotificationNotSent(NotificationSystemError):
     """
     Exception to raise when a notification is not able
