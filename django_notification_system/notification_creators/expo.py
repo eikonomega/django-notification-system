@@ -15,6 +15,8 @@ from django.utils import timezone
 from ..models import Notification
 
 # TODO: Document what keys Expo supports for the `extra` argument.
+
+
 def create_notification(
     user: User,
     title: str,
@@ -33,16 +35,16 @@ def create_notification(
         user (User): The user to whom the push notification will be sent.
         title (str): The title for the push notification.
         body (str): [description]. The body of the push notification.
-        scheduled_delivery (datetime, optional): [description]. Defaults to immediately.
+        scheduled_delivery (datetime, optional): Defaults to immediately.
         retry_time_interval (int, optional): Delay between send attempts. Defaults to 60 seconds.
         max_retries (int, optional): Maximum number of retry attempts for delivery. Defaults to 3.
         quiet (bool, optional): Suppress exceptions from being raised. Defaults to False.
-        extra (dict, optional): [description]. Defaults to None.
+        extra (dict, optional): Defaults to None.
 
     Raises:
-        UserIsOptedOut: [description]
-        UserHasNoTargets: [description]
-        NotificationNotSent: [description]
+        UserIsOptedOut: When the user has an active opt-out.
+        UserHasNoTargets: When the user has no eligible targets for this notification type.
+        NotificationsNotCreated: When the notifications could not be created.
     """
 
     try:
@@ -55,8 +57,7 @@ def create_notification(
 
     user_targets = user_notification_targets(user=user, target_name="Expo")
 
-    # TODO: Does this need to have .count()?
-    if not user_targets.count():
+    if not user_targets:
         if quiet:
             return
         else:

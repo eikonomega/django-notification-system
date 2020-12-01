@@ -46,7 +46,7 @@ def create_notification(
     Raises:
         UserIsOptedOut: When the user has an active opt-out.
         UserHasNoTargets: When the user has no eligible targets for this notification type.
-        NotificationNotSent: [description]
+        NotificationsNotCreated: When the notifications could not be created.
     """
 
     try:
@@ -59,8 +59,7 @@ def create_notification(
 
     user_targets = user_notification_targets(user=user, target_name="Email")
 
-    # TODO: Does this need to have .count()?
-    if not user_targets.count():
+    if not user_targets:
         if quiet:
             return
         else:
