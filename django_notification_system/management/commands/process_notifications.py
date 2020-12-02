@@ -36,20 +36,15 @@ class Command(BaseCommand):
             if '__init__' in handle:
                 # Ignore the init file
                 continue
-
-            funcion_dict = {}
-
             try:
                 # Strip off the .py before importing the module
                 notification_system = handle.partition('.py')[0]
                 handler = importlib.import_module(
                     f"django_notification_system.notification_handlers.{notification_system}")
-                # Add the function to our function dict
-                funcion_dict['send_notification'] = getattr(handler, 'send_notification')
+                # Add the function to our function table
+                cls.__function_table[notification_system] = getattr(handler, 'send_notification')
             except (ModuleNotFoundError, AttributeError):
                 pass
-
-            cls.__function_table[notification_system] = funcion_dict
 
     def handle(self, *args, **options):
         # Load the function table
@@ -78,8 +73,7 @@ class Command(BaseCommand):
                 notification_type = notification.user_target.target.name.lower()
                 try:
                     # Use our function table to call the appropriate sending function
-                    response_message = self.__function_table[notification_type]['send_notification'](
-                        notification)
+                    response_message = self.__function_table[notification_type](notification)
                 except KeyError:
                     print(
                         f'invalid notification target name {notification.user_target.target.name}')
