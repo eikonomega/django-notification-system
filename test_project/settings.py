@@ -120,4 +120,4 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-NOTIFICATION_SYSTEM_HANDLERS = [BASE_DIR / 'test_project/notification_handlers']
+# NOTIFICATION_SYSTEM_HANDLERS = [BASE_DIR / 'notification_handlers']
