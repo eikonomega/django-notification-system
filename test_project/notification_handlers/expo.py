@@ -3,13 +3,13 @@ from exponent_server_sdk import (
     PushMessage,
     PushResponseError,
     PushServerError,
-    DeviceNotRegisteredError
+    DeviceNotRegisteredError,
 )
 from requests import HTTPError
 
 from django.utils import timezone
 
-from ..utils import check_and_update_retry_attempts
+# from ..utils import check_and_update_retry_attempts
 
 
 def send_notification(notification):
@@ -100,7 +100,7 @@ def handle_push_response(notification, response):
         user_target.save()
         return "{}: {}".format(type(e), e)
     except PushResponseError as e:
-        check_and_update_retry_attempts(notification)
+        # check_and_update_retry_attempts(notification)
         return "{}: {}".format(type(e), e)
     else:
         notification.status = notification.DELIVERED

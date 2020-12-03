@@ -27,43 +27,59 @@ class Command(BaseCommand):
         functions.
         """
         import django_notification_system.notification_handlers
+
         # Get our handler directory. NOTE: We want to add one for the functions users will create
         # to add to our table.
-        handler_dir = path.dirname(inspect.getfile(
-            django_notification_system.notification_handlers))
+        handler_dir = path.dirname(
+            inspect.getfile(django_notification_system.notification_handlers)
+        )
 
-        for handle in os.listdir(path.join(handler_dir)):
-            if '__init__' in handle:
+        for file in os.listdir(path.join(handler_dir)):
+            if "__init__" in file:
                 # Ignore the init file
                 continue
             try:
                 # Strip off the .py before importing the module
-                notification_system = handle.partition('.py')[0]
-                handler = importlib.import_module(
-                    f"django_notification_system.notification_handlers.{notification_system}")
+                notification_system = file.partition(".py")[0]
+                module = importlib.import_module(
+                    f"django_notification_system.notification_handlers.{notification_system}"
+                )
+                print("Working Module", module.__dict__)
                 # Add the function to our function table
-                cls.__function_table[notification_system] = getattr(handler, 'send_notification')
+                cls.__function_table[notification_system] = getattr(
+                    module, "send_notification"
+                )
             except (ModuleNotFoundError, AttributeError):
                 pass
 
-        for egg in settings.NOTIFICATION_SYSTEM_HANDLERS:
-            for handle in os.listdir(path.join(egg)):
-                if '__init__' in handle:
+        print("After First Loopie Loop", cls.__function_table)
+
+        for directory in settings.NOTIFICATION_SYSTEM_HANDLERS:
+            for file in os.listdir(path.join(directory)):
+                print("Current File Being Evaluated", file)
+                if "__init__" in file:
                     # Ignore the init file
                     continue
                 try:
-                    # Strip off the .py before importing the module
-                    notification_system = handle.partition('.py')[0]
-                    handler = importlib.util.spec_from_file_location(
-                        "eggs",
-                        f"{egg}/{handle}")
-                    func = importlib.util.module_from_spec(handler)
-                    print(func.loader)
-                    real_func = getattr(func.loader, 'send_notification')
-                    # Add the function to our function table
+                    module_spec = importlib.util.spec_from_file_location(
+                        file, f"{directory}/{file}"
+                    )
+                    print("Module Spec:", module_spec)
+                    module = importlib.util.module_from_spec(module_spec)
+                    print("Module:", module)
+                    module_spec.loader.exec_module(module)
+                    real_func = getattr(module, "send_notification")
+
+                    print("Function of Eggs, named Pepper", real_func)
+
+                    notification_system = file.partition(".py")[0]
                     cls.__function_table[notification_system] = real_func
-                except (ModuleNotFoundError, AttributeError):
-                    print("FAILURE")
+
+                    # Add the function to our function table
+                    # cls.__function_table[notification_system] = real_func
+                except (ModuleNotFoundError, AttributeError) as error:
+                    print("FAILURE", error)
+                    # print(getattr(module, "send_notification"))
                     pass
 
     def handle(self, *args, **options):
@@ -74,31 +90,39 @@ class Command(BaseCommand):
         # Get all SCHEDULED and RETRY notifications with a
         # scheduled_delivery before the current date_time
         notifications = Notification.objects.filter(
-            Q(status='SCHEDULED') | Q(status='RETRY'),
-            scheduled_delivery__lte=timezone.now())
+            Q(status="SCHEDULED") | Q(status="RETRY"),
+            scheduled_delivery__lte=timezone.now(),
+        )
 
         # excludes all notifications where the user has OptOut object with has_opted_out=True
         notifications = notifications.exclude(
-            user_target__user__notification_opt_out__active=True)
+            user_target__user__notification_opt_out__active=True
+        )
 
         # Loop through each notification and attempt to push it
         for notification in notifications:
             print(
-                f"{notification.user_target.user.username} - {notification.scheduled_delivery} - {notification.status}")
+                f"{notification.user_target.user.username} - {notification.scheduled_delivery} - {notification.status}"
+            )
             print(f"{notification.title} - {notification.body}")
 
             if not notification.user_target.active:
                 notification.status = Notification.INACTIVE_DEVICE
                 notification.save()
             else:
-                notification_type = notification.user_target.target.name.lower()
+                notification_type = (
+                    notification.user_target.target.notification_module_name
+                )
                 try:
                     # Use our function table to call the appropriate sending function
-                    response_message = self.__function_table[notification_type](notification)
+                    response_message = self.__function_table[notification_type](
+                        notification
+                    )
                 except KeyError:
                     print(
-                        f'invalid notification target name {notification.user_target.target.name}')
+                        f"invalid notification target name {notification.user_target.target.name}"
+                    )
                 else:
                     # The notification was sent successfully
                     print(response_message)
-                    print('*********************************')
+                    print("*********************************")
