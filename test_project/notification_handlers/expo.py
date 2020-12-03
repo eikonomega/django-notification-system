@@ -22,6 +22,7 @@ def send_notification(notification):
     Returns:
         String: Whether the push notification has successfully sent, or an error message.
     """
+    return "Notification Successfully Pushed!"
     extra = prepare_extra(notification.extra)
 
     try:

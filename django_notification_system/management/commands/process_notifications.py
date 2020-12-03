@@ -46,9 +46,30 @@ class Command(BaseCommand):
             except (ModuleNotFoundError, AttributeError):
                 pass
 
+        for egg in settings.NOTIFICATION_SYSTEM_HANDLERS:
+            for handle in os.listdir(path.join(egg)):
+                if '__init__' in handle:
+                    # Ignore the init file
+                    continue
+                try:
+                    # Strip off the .py before importing the module
+                    notification_system = handle.partition('.py')[0]
+                    handler = importlib.util.spec_from_file_location(
+                        "eggs",
+                        f"{egg}/{handle}")
+                    func = importlib.util.module_from_spec(handler)
+                    print(func.loader)
+                    real_func = getattr(func.loader, 'send_notification')
+                    # Add the function to our function table
+                    cls.__function_table[notification_system] = real_func
+                except (ModuleNotFoundError, AttributeError):
+                    print("FAILURE")
+                    pass
+
     def handle(self, *args, **options):
         # Load the function table
         self._load_function_table()
+        print(self.__function_table)
 
         # Get all SCHEDULED and RETRY notifications with a
         # scheduled_delivery before the current date_time
