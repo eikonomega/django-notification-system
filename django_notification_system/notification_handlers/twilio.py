@@ -16,7 +16,6 @@ def send_notification(notification):
     Returns:
         String: Whether the SMS has successfully sent, or an error message.
     """
-    return('SMS Successfully sent!')
     try:
         twilio_account_sid = settings.TWILIO_ACCOUNT_SID
         twilio_auth_token = settings.TWILIO_AUTH_TOKEN

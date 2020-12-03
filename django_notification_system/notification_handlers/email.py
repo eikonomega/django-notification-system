@@ -19,7 +19,6 @@ def send_notification(notification):
     Returns:
         str: Whether the email has successfully sent, or an error message.
     """
-    return "Email Successfully Sent"
     try:
         django.core.mail.send_mail(
             subject=notification.title,
