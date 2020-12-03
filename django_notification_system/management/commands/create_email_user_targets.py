@@ -20,13 +20,6 @@ class Command(BaseCommand):
         """
         This is what is being run by manage.py
         """
-
-        # This is being called in case this command is run before
-        # the email target has been created.
-        Target.objects.get_or_create(
-            name="Email", notification_module_name="email"
-        )
-
         all_users = User.objects.all()
 
         for user in all_users:

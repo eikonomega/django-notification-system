@@ -66,7 +66,7 @@ class UserTarget(CreatedModifiedAbstractModel):
         user: a user
         """
         email_target, created = Target.objects.get_or_create(
-            name="Email", notification_module_name="Email"
+            name="Email", notification_module_name="email"
         )
 
         with transaction.atomic():
