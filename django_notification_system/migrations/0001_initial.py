@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('modified_date', models.DateTimeField(auto_now=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=15, unique=True)),
-                ('notification_creator_module', models.CharField(max_length=50)),
+                ('notification_module_name', models.CharField(max_length=50)),
             ],
             options={
                 'verbose_name_plural': 'Targets',
