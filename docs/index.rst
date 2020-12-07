@@ -10,6 +10,10 @@ Welcome to Django Notification System's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   models
+   management_commands
+   utility_functions
+
 
 
 Indices and tables
