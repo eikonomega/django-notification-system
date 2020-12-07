@@ -35,13 +35,12 @@ def create_notification(
         body (str, optional): Body of the email. Defaults to a blank string if not given.
             Additionally, if this parameter is not specific AND "template_name" is present
             in `extra`, an attempt will be made to generate the body from that template.
-        template_name (str): The name of the email template to use. This is will be searched for in the directories specified by SETTING_INFO_GOES_HERE.
         scheduled_delivery (datetime, optional): When to delivery the notification. Defaults to immediately.
         retry_time_interval (int, optional): When to retry sending the notification if a delivery failure occurs. Defaults to 1440 seconds.
         max_retries (int, optional): Maximum number of retry attempts. Defaults to 3.
         quiet (bool, optional): Suppress exceptions from being raised. Defaults to False.
         extra (dict, optional): User specified additional data that will be used to
-            populate an HTML template if "template_name" is present.
+            populate an HTML template if "template_name" is present inside.
 
     Raises:
         UserIsOptedOut: When the user has an active opt-out.
