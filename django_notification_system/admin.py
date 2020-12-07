@@ -35,14 +35,9 @@ class NotificationAdmin(admin.ModelAdmin):
 
 @admin.register(OptOut)
 class OptOutAdmin(admin.ModelAdmin):
-    list_display = ["user", "active", "opt_out_link"]
+    list_display = ["user", "active"]
     autocomplete_fields = ["user"]
-    readonly_fields = ["opt_out_link"]
     search_fields = USER_SEARCH_FIELDS
-
-    def opt_out_link(self, obj):
-        user = obj.user
-        return mark_safe(f"<a href={get_opt_out_link(user)}>opt out link</a>")
 
 
 @admin.register(Target)
