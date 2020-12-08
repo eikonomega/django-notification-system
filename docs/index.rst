@@ -3,8 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Django Notification System's documentation!
+Django Notification System
 ======================================================
+
+.. include:: introduction.rst
 
 .. toctree::
    :maxdepth: 2
