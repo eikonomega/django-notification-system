@@ -8,7 +8,6 @@ from .user_target import UserTarget
 
 
 class Notification(CreatedModifiedAbstractModel):
-
     """
     Definition of a Notification.
 
