@@ -1,10 +1,8 @@
-# TODO: Justin - will need to import User in such a way as to pick up custom user models.
-# Here, and anywhere else User is referenced.
-# https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#reusable-apps-and-auth-user-model
+"""Django Management Command."""
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
-from ...models import UserInNotificationTarget
+from ...models import TargetUserRecord
 
 User = get_user_model()
 
@@ -24,4 +22,4 @@ class Command(BaseCommand):
 
         for user in all_users:
             # Calling this will create an email user target for each user.
-            UserInNotificationTarget.reset_email_target(user)
+            TargetUserRecord.reset_email_target(user)

@@ -31,5 +31,5 @@ class NotificationTarget(CreatedModifiedAbstractModel):
         return self.name
 
     class Meta:
-        db_table = "notification_system_notification_target"
+        db_table = "notification_system_target"
         verbose_name_plural = "Notification Targets"

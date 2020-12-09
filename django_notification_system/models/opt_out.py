@@ -9,7 +9,7 @@ from .notification import Notification
 
 class NotificationOptOut(CreatedModifiedAbstractModel):
     """
-    Definition of a User Opt-Out Model
+    Definition of a User Opt-Out Model.
 
     Users who have opted-out of communications will have an instance of this model.
 
@@ -32,7 +32,7 @@ class NotificationOptOut(CreatedModifiedAbstractModel):
     active = models.BooleanField(default=False)
 
     class Meta:
-        db_table = "notification_system_notification_opt_out"
+        db_table = "notification_system_opt_out"
         verbose_name_plural = "Notification Opt Outs"
 
     def __str__(self):

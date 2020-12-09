@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from .abstract import CreatedModifiedAbstractModel
-from .user_target import UserInNotificationTarget
+from .target_user_record import TargetUserRecord
 
 
 class Notification(CreatedModifiedAbstractModel):
@@ -15,7 +15,7 @@ class Notification(CreatedModifiedAbstractModel):
     ----------
     id : UUID
         The unique UUID of the record.
-    user_target : UserInNotificationTarget
+    target_user_record : UserInNotificationTarget
         The UserInNotificationTarget associated with notification
     title : str
         The title for the notification. Exact representation depends on the target.
@@ -56,8 +56,10 @@ class Notification(CreatedModifiedAbstractModel):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user_target = models.ForeignKey(
-        UserInNotificationTarget, on_delete=models.CASCADE, related_name="notifications"
+    target_user_record = models.ForeignKey(
+        TargetUserRecord,
+        on_delete=models.CASCADE,
+        related_name="notifications",
     )
     title = models.CharField(max_length=100)
     body = models.TextField()
@@ -73,7 +75,7 @@ class Notification(CreatedModifiedAbstractModel):
         db_table = "notification_system_notification"
         verbose_name_plural = "Notifications"
         unique_together = [
-            "user_target",
+            "target_user_record",
             "scheduled_delivery",
             "title",
             "extra",
@@ -81,7 +83,9 @@ class Notification(CreatedModifiedAbstractModel):
 
     def __str__(self):
         return "{} - {} - {}".format(
-            self.user_target.user.username, self.status, self.scheduled_delivery
+            self.target_user_record.user.username,
+            self.status,
+            self.scheduled_delivery,
         )
 
     def clean(self):
@@ -100,8 +104,8 @@ class Notification(CreatedModifiedAbstractModel):
             Will include details of what caused the validation error.
         """
         opted_out = (
-            hasattr(self.user_target.user, "notification_opt_out")
-            and self.user_target.user.notification_opt_out.has_opted_out
+            hasattr(self.target_user_record.user, "notification_opt_out")
+            and self.target_user_record.user.notification_opt_out.has_opted_out
         )
         if opted_out:
             raise ValidationError("This user has opted out of Notifications.")
