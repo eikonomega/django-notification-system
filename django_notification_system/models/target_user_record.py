@@ -8,9 +8,9 @@ from .abstract import CreatedModifiedAbstractModel
 from .target import NotificationTarget
 
 
-class UserInNotificationTarget(CreatedModifiedAbstractModel):
+class TargetUserRecord(CreatedModifiedAbstractModel):
     """
-    Definition of a UserInNotificationTarget
+    Definition of a TargetUserRecord.
 
     Each user will have a unique ID for each notification target,
     which is how we identify the individual who will receive the
@@ -40,7 +40,7 @@ class UserInNotificationTarget(CreatedModifiedAbstractModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="notification_targets",
+        related_name="notification_target_user_records",
     )
     target = models.ForeignKey(NotificationTarget, on_delete=models.PROTECT)
     target_user_id = models.CharField(max_length=200)
@@ -48,7 +48,7 @@ class UserInNotificationTarget(CreatedModifiedAbstractModel):
     active = models.BooleanField(default=True)
 
     class Meta:
-        db_table = "notification_system_user_in_notification_target"
+        db_table = "notification_system_target_user_record"
         verbose_name_plural = "User In Notification Targets"
         constraints = [
             models.UniqueConstraint(
@@ -72,12 +72,12 @@ class UserInNotificationTarget(CreatedModifiedAbstractModel):
         with transaction.atomic():
             # using atomic so user always has a valid email
             # Mark all their previous emails as inactive
-            UserInNotificationTarget.objects.filter(
+            TargetUserRecord.objects.filter(
                 user=user,
                 target=email_target,
             ).update(active=False)
 
-            UserInNotificationTarget.objects.update_or_create(
+            TargetUserRecord.objects.update_or_create(
                 user=user,
                 target=email_target,
                 target_user_id=user.email,

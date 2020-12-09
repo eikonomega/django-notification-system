@@ -3,7 +3,12 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Notification, NotificationOptOut, NotificationTarget, UserInNotificationTarget
+from .models import (
+    Notification,
+    NotificationOptOut,
+    NotificationTarget,
+    TargetUserRecord,
+)
 from .utils.opt_out_link import get_opt_out_link
 from .utils.admin_site_utils import (
     MeOrAllFilter,
@@ -15,7 +20,7 @@ from .utils.admin_site_utils import (
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
     list_display = [
-        "user_target",
+        "target_user_record",
         "status",
         "scheduled_delivery",
         "attempted_delivery",
@@ -23,14 +28,14 @@ class NotificationAdmin(admin.ModelAdmin):
     list_filter = [
         "status",
         is_null_filter_factory("attempted_delivery"),
-        "user_target__target",
+        "target_user_record__target",
     ]
 
     search_fields = [
-        "user_target__" + field for field in USER_SEARCH_FIELDS
+        "target_user_record__" + field for field in USER_SEARCH_FIELDS
     ] + ["title", "body"]
 
-    autocomplete_fields = ["user_target"]
+    autocomplete_fields = ["target_user_record"]
 
 
 @admin.register(NotificationOptOut)
@@ -45,7 +50,7 @@ class NotificationTargetAdmin(admin.ModelAdmin):
     list_display = ["name", "notification_module_name"]
 
 
-@admin.register(UserInNotificationTarget)
+@admin.register(TargetUserRecord)
 class UserInNotificationTargetAdmin(admin.ModelAdmin):
     list_display = [
         "user",
