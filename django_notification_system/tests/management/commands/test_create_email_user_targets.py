@@ -4,7 +4,7 @@ from django.test import TestCase
 from six import StringIO
 
 from website.notifications.management.commands.create_email_user_targets import Command
-from website.notifications.models import Target, UserTarget
+from website.notifications.models import NotificationTarget, UserInNotificationTarget
 
 cmd = Command()
 
@@ -22,16 +22,16 @@ class TestCommand(TestCase):
         """
         Ensure command is functioning correctly.
         """
-        # Delete UserTarget from initial signal.
-        UserTarget.objects.all().delete()
+        # Delete UserInNotificationTarget from initial signal.
+        UserInNotificationTarget.objects.all().delete()
 
-        pre_call = UserTarget.objects.all()
+        pre_call = UserInNotificationTarget.objects.all()
         self.assertEqual(len(pre_call), 0)
 
         out = StringIO()
         call_command('create_email_user_targets', stdout=out)
 
-        post_call = UserTarget.objects.all()
+        post_call = UserInNotificationTarget.objects.all()
         self.assertEqual(len(post_call), 1)
 
         for target in post_call:

@@ -7,14 +7,14 @@ def create_initial_targets(apps, schema_editor):
     """
     Initialize the database with the Targets that we have functions available for.
     """
-    Target = apps.get_model('django_notification_system', 'Target')
-    Target.objects.get_or_create(
+    NotificationTarget = apps.get_model('django_notification_system', 'NotificationTarget')
+    NotificationTarget.objects.get_or_create(
         name="Twilio",
         notification_module_name="twilio")
-    Target.objects.get_or_create(
+    NotificationTarget.objects.get_or_create(
         name="Email",
         notification_module_name="email")
-    Target.objects.get_or_create(
+    NotificationTarget.objects.get_or_create(
         name="Expo",
         notification_module_name="expo")
 

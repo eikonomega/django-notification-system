@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from website.api_v3.tests import factories
-from website.notifications.models import OptOut
+from website.notifications.models import NotificationOptOut
 from website.notifications.utils.opt_out_link import get_opt_out_link
 
 
@@ -15,7 +15,7 @@ class TestOptOutView(TestCase):
     def test_normal_operation(self):
         """an anonymous user is able to unsubscribe"""
         link = get_opt_out_link(self.user)
-        opt_out = OptOut.objects.get(user=self.user)
+        opt_out = NotificationOptOut.objects.get(user=self.user)
         response = self.client.get(link)
 
         self.assertEqual(response.status_code, 200)
@@ -25,7 +25,7 @@ class TestOptOutView(TestCase):
 
         self.assertEqual(response2.status_code, 302)
         self.assertEqual(response2.url, link)
-        opt_out = OptOut.objects.get(user=self.user)
+        opt_out = NotificationOptOut.objects.get(user=self.user)
         self.assertEqual(opt_out.has_opted_out, True)
 
 

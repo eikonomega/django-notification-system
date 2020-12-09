@@ -69,7 +69,7 @@ class Command(BaseCommand):
             scheduled_delivery__lte=timezone.now(),
         )
 
-        # excludes all notifications where the user has OptOut object with has_opted_out=True
+        # excludes all notifications where the user has NotificationOptOut object with has_opted_out=True
         notifications = notifications.exclude(user_target__user__notification_opt_out__active=True)
 
         # Loop through each notification and attempt to push it

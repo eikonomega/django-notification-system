@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Notification, OptOut, Target, UserTarget
+from .models import Notification, NotificationOptOut, NotificationTarget, UserInNotificationTarget
 from .utils.opt_out_link import get_opt_out_link
 from .utils.admin_site_utils import (
     MeOrAllFilter,
@@ -33,20 +33,20 @@ class NotificationAdmin(admin.ModelAdmin):
     autocomplete_fields = ["user_target"]
 
 
-@admin.register(OptOut)
-class OptOutAdmin(admin.ModelAdmin):
+@admin.register(NotificationOptOut)
+class NotificationOptOutAdmin(admin.ModelAdmin):
     list_display = ["user", "active"]
     autocomplete_fields = ["user"]
     search_fields = USER_SEARCH_FIELDS
 
 
-@admin.register(Target)
-class TargetAdmin(admin.ModelAdmin):
+@admin.register(NotificationTarget)
+class NotificationTargetAdmin(admin.ModelAdmin):
     list_display = ["name", "notification_module_name"]
 
 
-@admin.register(UserTarget)
-class UserTargetAdmin(admin.ModelAdmin):
+@admin.register(UserInNotificationTarget)
+class UserInNotificationTargetAdmin(admin.ModelAdmin):
     list_display = [
         "user",
         "target",

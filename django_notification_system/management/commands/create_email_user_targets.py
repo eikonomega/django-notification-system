@@ -4,7 +4,7 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
-from ...models import Target, UserTarget
+from ...models import UserInNotificationTarget
 
 User = get_user_model()
 
@@ -24,4 +24,4 @@ class Command(BaseCommand):
 
         for user in all_users:
             # Calling this will create an email user target for each user.
-            UserTarget.reset_email_target(user)
+            UserInNotificationTarget.reset_email_target(user)

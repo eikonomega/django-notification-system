@@ -16,13 +16,13 @@ notification_module_name str      The name of the module in the notification_cre
 **Example Usage**
         .. code-block:: python
 
-                from django_notification_system.models import Target
+                from django_notification_system.models import NotificationTarget
 
                 # Note: The notification_module_name will be the name of the module you have in the
                 # directory you have specified in your settings file.
                 # Example: if in my settings I have the NOTIFICATION_SYSTEM_HANDLERS = [BASE_DIR / "extra_handlers"],
                 # and inside that directory I have a file called 'sms.py', the notification_module_name will be 'sms'
-                target = Target.objects.create(
+                target = NotificationTarget.objects.create(
                     name='SMS', 
                     notification_module_name='sms')
                 
@@ -49,14 +49,14 @@ active         boolean     Indicator of whether user target is active or not. Fo
                 
                 from django.contrib.auth import get_user_model
                 
-                from django_notification_system.models import Target, UserTarget
+                from django_notification_system.models import NotificationTarget, UserInNotificationTarget
 
                 User = get_user_model()
                 
                 user = User.objects.get(first_name="Eggs", last_name="Benedict")
-                target = Target.objects.get(name='Twilio')
+                target = NotificationTarget.objects.get(name='Twilio')
                 
-                user_target = UserTarget.objects.create(
+                user_target = UserInNotificationTarget.objects.create(
                     user=user,
                     target=target,
                     target_user_id=user.phone_number,
@@ -67,14 +67,14 @@ active         boolean     Indicator of whether user target is active or not. Fo
 **Class method**
 
 There is a ``reset_email_target`` method that can be used on this model. This will either create an email
-UserTarget for this User or update their email UserTarget if the User email has been updated.
+UserInNotificationTarget for this User or update their email UserInNotificationTarget if the User email has been updated.
 
 **Example Usage**
         .. code-block:: python
                 
                 from django.contrib.auth import get_user_model
                 
-                from django_notification_system.models import UserTarget
+                from django_notification_system.models import UserInNotificationTarget
 
                 User = get_user_model()
                 
@@ -82,10 +82,10 @@ UserTarget for this User or update their email UserTarget if the User email has 
                 user.email = 'egg@egg.egg'
                 user.save()
 
-                new_user_target = UserTarget.reset_email_target(user)
+                new_user_target = UserInNotificationTarget.reset_email_target(user)
 
 
-OptOut
+NotificationOptOut
 ------
 Users who have opted-out of communications will have an instance of this model.
 
@@ -102,12 +102,12 @@ active  boolean     Indicator for whether the opt out is active or not.
                 
                 from django.contrib.auth import get_user_model
                 
-                from django_notification_system.models import OptOut
+                from django_notification_system.models import NotificationOptOut
 
                 User = get_user_model()
                 user = User.objects.get(first_name="Eggs", last_name="Benedict")
                 
-                opt_out = OptOut.objects.create(
+                opt_out = NotificationOptOut.objects.create(
                     user=user,
                     active=True)
 
@@ -124,7 +124,7 @@ Attributes
 ++++++++++
 =================== =========== =================================================================================================================
 **Key**             **Type**    **Description**
-user_target         UserTarget  The UserTarget associated with notification
+user_target         UserInNotificationTarget  The UserInNotificationTarget associated with notification
 title               str         The title for the notification. Exact representation depends on the target.
 body                str         The main message of the notification to be sent.
 extra               dict        A dictionary of extra data to be sent to the notification processor. Valid keys are determined by each processor.
@@ -142,12 +142,12 @@ max_retries         PositiveInt The max number of allowed retries.
                 from django.contrib.auth import get_user_model
                 from django.utils import timezone
                 
-                from django_notification_system.models import UserTarget, Notification
+                from django_notification_system.models import UserInNotificationTarget, Notification
 
                 User = get_user_model()
                 user = User.objects.get(first_name="Eggs", last_name="Benedict")
 
-                userTarget = UserTarget.objects.get(
+                userTarget = UserInNotificationTarget.objects.get(
                         user=User,
                         target__name='Email')
                 

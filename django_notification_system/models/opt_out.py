@@ -7,7 +7,7 @@ from .abstract import CreatedModifiedAbstractModel
 from .notification import Notification
 
 
-class OptOut(CreatedModifiedAbstractModel):
+class NotificationOptOut(CreatedModifiedAbstractModel):
     """
     Definition of a User Opt-Out Model
 
@@ -32,8 +32,8 @@ class OptOut(CreatedModifiedAbstractModel):
     active = models.BooleanField(default=False)
 
     class Meta:
-        db_table = "notification_system_opt_out"
-        verbose_name_plural = "Opt Outs"
+        db_table = "notification_system_notification_opt_out"
+        verbose_name_plural = "Notification Opt Outs"
 
     def __str__(self):
         return self.user.username
@@ -49,4 +49,4 @@ class OptOut(CreatedModifiedAbstractModel):
                 status__in=[Notification.SCHEDULED, Notification.RETRY],
                 user_target__user=self.user,
             ).update(status=Notification.OPTED_OUT)
-        super(OptOut, self).save(*args, **kwargs)
+        super(NotificationOptOut, self).save(*args, **kwargs)

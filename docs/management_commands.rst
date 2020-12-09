@@ -18,7 +18,7 @@ FEAR NOT! In your terminal, run the command:
         $ python manage.py create_email_user_targets
 
 After the command has been run, navigate to ``http://localhost/admin/django_notification_system/usertarget/``.
-You should see a newly created UserTarget for each user currently in the DB.
+You should see a newly created UserInNotificationTarget for each user currently in the DB.
 
 .. figure::  images/create_email_user_targets/create_email_user_targets_2.png
     :align:   center
@@ -41,15 +41,15 @@ First, we'll need to have some Notifications in our database in order for this c
                 from django.contrib.auth import get_user_model
                 from django.utils import timezone
                 
-                from django_notification_system.models import UserTarget, Notification
+                from django_notification_system.models import UserInNotificationTarget, Notification
 
                 User = get_user_model()
                 
                 user = User.objects.get(first_name="Eggs", last_name="Benedict")
 
-                # Let's assume this user has 3 UserTarget objects, one for Expo, one for Twilio and
+                # Let's assume this user has 3 UserInNotificationTarget objects, one for Expo, one for Twilio and
                 # one for Email.
-                user_targets = UserTarget.objects.filter(
+                user_targets = UserInNotificationTarget.objects.filter(
                     user=user)
 
                 # We'll loop through these targets and create a basic Notification for each one.

@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 from website.notifications.models import (
-    Notification, Target, UserTarget)
+    Notification, NotificationTarget, UserInNotificationTarget)
 from website.notifications.utils.notification_handlers import (
     send_email)
 
@@ -22,7 +22,7 @@ class TestCreateEmailNotification(TestCase):
         self.user_with_target.save()
 
         self.notification = Notification.objects.create(
-            user_target=UserTarget.objects.get(user=self.user_with_target),
+            user_target=UserInNotificationTarget.objects.get(user=self.user_with_target),
             title="Hi.",
             body="<b>It me. Is it me?</b>",
             status='SCHEDULED',

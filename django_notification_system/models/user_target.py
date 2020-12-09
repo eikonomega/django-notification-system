@@ -5,12 +5,12 @@ from django.db import models
 from django.db import transaction
 
 from .abstract import CreatedModifiedAbstractModel
-from .target import Target
+from .target import NotificationTarget
 
 
-class UserTarget(CreatedModifiedAbstractModel):
+class UserInNotificationTarget(CreatedModifiedAbstractModel):
     """
-    Definition of a User Target
+    Definition of a UserInNotificationTarget
 
     Each user will have a unique ID for each notification target,
     which is how we identify the individual who will receive the
@@ -42,14 +42,14 @@ class UserTarget(CreatedModifiedAbstractModel):
         on_delete=models.CASCADE,
         related_name="notification_targets",
     )
-    target = models.ForeignKey(Target, on_delete=models.PROTECT)
+    target = models.ForeignKey(NotificationTarget, on_delete=models.PROTECT)
     target_user_id = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     active = models.BooleanField(default=True)
 
     class Meta:
-        db_table = "notification_system_user_target"
-        verbose_name_plural = "User Targets"
+        db_table = "notification_system_user_in_notification_target"
+        verbose_name_plural = "User In Notification Targets"
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "target", "target_user_id"],
@@ -65,19 +65,19 @@ class UserTarget(CreatedModifiedAbstractModel):
         ----------
         user: a user
         """
-        email_target, created = Target.objects.get_or_create(
+        email_target, created = NotificationTarget.objects.get_or_create(
             name="Email", notification_module_name="email"
         )
 
         with transaction.atomic():
             # using atomic so user always has a valid email
             # Mark all their previous emails as inactive
-            UserTarget.objects.filter(
+            UserInNotificationTarget.objects.filter(
                 user=user,
                 target=email_target,
             ).update(active=False)
 
-            UserTarget.objects.update_or_create(
+            UserInNotificationTarget.objects.update_or_create(
                 user=user,
                 target=email_target,
                 target_user_id=user.email,

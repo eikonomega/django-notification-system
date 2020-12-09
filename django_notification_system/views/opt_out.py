@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 
-from ..models.opt_out import OptOut
+from ..models.opt_out import NotificationOptOut
 from ..utils.opt_out_link import get_opt_out_link
 from ...utils.logging_utils import generate_extra
 
@@ -19,7 +19,7 @@ class OptOutForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         opt_out_uuid = cleaned_data.get('opt_out_uuid')
-        if not OptOut.objects.filter(id=opt_out_uuid):
+        if not NotificationOptOut.objects.filter(id=opt_out_uuid):
             logger.error("invalid opt out id")
             raise ValidationError('Bad Opt Out ID')
         else:
@@ -36,7 +36,7 @@ class OptOutView(View):
         form = OptOutForm(request.POST)
         if not form.is_valid():
             raise ValidationError(form.errors)
-        opt_out = OptOut.objects.get(id=form.cleaned_data['opt_out_uuid'])
+        opt_out = NotificationOptOut.objects.get(id=form.cleaned_data['opt_out_uuid'])
         opt_out.has_opted_out = not opt_out.has_opted_out
         opt_out.save() # save deletes all pending notifications!
         logger.info(
@@ -61,7 +61,7 @@ class OptOutView(View):
             # TODO: create a view where users can request to be emailed a new opt-out link
             return redirect("portal2.landing_page")
 
-        opt_out = OptOut.objects.get(id=opt_out_uuid)
+        opt_out = NotificationOptOut.objects.get(id=opt_out_uuid)
         user = opt_out.user
         context = {
             'form': form,

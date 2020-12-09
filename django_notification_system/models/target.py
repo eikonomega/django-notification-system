@@ -5,7 +5,7 @@ from django.db import models
 from .abstract import CreatedModifiedAbstractModel
 
 
-class Target(CreatedModifiedAbstractModel):
+class NotificationTarget(CreatedModifiedAbstractModel):
     """
     Definition of a Notification Target.
 
@@ -31,5 +31,5 @@ class Target(CreatedModifiedAbstractModel):
         return self.name
 
     class Meta:
-        db_table = "notification_system_target"
-        verbose_name_plural = "Targets"
+        db_table = "notification_system_notification_target"
+        verbose_name_plural = "Notification Targets"

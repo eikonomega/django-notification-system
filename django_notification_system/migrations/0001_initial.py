@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Target',
+            name='NotificationTarget',
             fields=[
                 ('created_date', models.DateTimeField(auto_now_add=True)),
                 ('modified_date', models.DateTimeField(auto_now=True)),
@@ -25,12 +25,12 @@ class Migration(migrations.Migration):
                 ('notification_module_name', models.CharField(max_length=50)),
             ],
             options={
-                'verbose_name_plural': 'Targets',
-                'db_table': 'notification_system_target',
+                'verbose_name_plural': 'Notification Targets',
+                'db_table': 'notification_system_notification_target',
             },
         ),
         migrations.CreateModel(
-            name='UserTarget',
+            name='UserInNotificationTarget',
             fields=[
                 ('created_date', models.DateTimeField(auto_now_add=True)),
                 ('modified_date', models.DateTimeField(auto_now=True)),
@@ -42,12 +42,12 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notification_targets', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name_plural': 'User Targets',
-                'db_table': 'notification_system_user_target',
+                'verbose_name_plural': 'User In Notification Targets',
+                'db_table': 'notification_system_user_in_notification_target',
             },
         ),
         migrations.CreateModel(
-            name='OptOut',
+            name='NotificationOptOut',
             fields=[
                 ('created_date', models.DateTimeField(auto_now_add=True)),
                 ('modified_date', models.DateTimeField(auto_now=True)),
@@ -56,8 +56,8 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='notification_opt_out', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name_plural': 'Opt Outs',
-                'db_table': 'notification_system_opt_out',
+                'verbose_name_plural': 'Notification Opt Outs',
+                'db_table': 'notification_system_notification_opt_out',
             },
         ),
         migrations.CreateModel(

@@ -7,7 +7,7 @@ from django.utils import timezone
 from exponent_server_sdk import PushResponse
 from six import StringIO
 
-from website.notifications.models import Target, UserTarget, Notification, OptOut
+from website.notifications.models import NotificationTarget, UserInNotificationTarget, Notification, NotificationOptOut
 from website.api_v3.tests import factories
 from website.notifications.utils.notification_handlers import handle_push_response
 from ...mock_exponent_server_sdk import MockPushClient
@@ -37,7 +37,7 @@ class TestCommand(TestCase):
             user=self.dev_user,
         )
 
-        self.user_target_email = UserTarget.objects.get(
+        self.user_target_email = UserInNotificationTarget.objects.get(
             user=self.user_with_notifications,
             target=self.target_email,
             active=True,
@@ -286,7 +286,7 @@ class TestCommand(TestCase):
             with self.settings(DISABLE_EMAILS=False):
                 user = factories.UserFactory()
                 Notification.objects.create(
-                    user_target=UserTarget.objects.get(user=user),
+                    user_target=UserInNotificationTarget.objects.get(user=user),
                     status=Notification.SCHEDULED,
                     title="Notification to be recieved",
                     body="<p>Body of the message</p>",
@@ -297,17 +297,17 @@ class TestCommand(TestCase):
                 self.assertIn(f"{user.username}", out.getvalue())
 
                 Notification.objects.create(
-                    user_target=UserTarget.objects.get(user=user),
+                    user_target=UserInNotificationTarget.objects.get(user=user),
                     status=Notification.SCHEDULED,
                     title="Notification to Not be recieved 1",
                     body="<p>Body of the message</p>",
                     scheduled_delivery="2018-10-24T12:42:13-04:00",
                 )
 
-                OptOut.objects.create(user=user, has_opted_out=True)
+                NotificationOptOut.objects.create(user=user, has_opted_out=True)
 
                 Notification.objects.create(
-                    user_target=UserTarget.objects.get(user=user),
+                    user_target=UserInNotificationTarget.objects.get(user=user),
                     status=Notification.SCHEDULED,
                     title="Notification to Not be recieved 2",
                     body="<p>Body of the message</p>",

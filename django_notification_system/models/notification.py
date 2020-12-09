@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 from .abstract import CreatedModifiedAbstractModel
-from .user_target import UserTarget
+from .user_target import UserInNotificationTarget
 
 
 class Notification(CreatedModifiedAbstractModel):
@@ -15,8 +15,8 @@ class Notification(CreatedModifiedAbstractModel):
     ----------
     id : UUID
         The unique UUID of the record.
-    user_target : UserTarget
-        The UserTarget associated with notification
+    user_target : UserInNotificationTarget
+        The UserInNotificationTarget associated with notification
     title : str
         The title for the notification. Exact representation depends on the target.
         For example, for an email notification this will be used as the subject of the email.
@@ -57,7 +57,7 @@ class Notification(CreatedModifiedAbstractModel):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_target = models.ForeignKey(
-        UserTarget, on_delete=models.CASCADE, related_name="notifications"
+        UserInNotificationTarget, on_delete=models.CASCADE, related_name="notifications"
     )
     title = models.CharField(max_length=100)
     body = models.TextField()

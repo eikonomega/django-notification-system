@@ -4,13 +4,13 @@ As a convience, the models are made available directly on the package namespace.
 """
 
 from .notification import Notification
-from .opt_out import OptOut
-from .target import Target
-from .user_target import UserTarget
+from .opt_out import NotificationOptOut
+from .target import NotificationTarget
+from .user_target import UserInNotificationTarget
 
 __all__ = [
-    "OptOut",
-    "Target",
-    "UserTarget",
+    "NotificationOptOut",
+    "NotificationTarget",
+    "UserInNotificationTarget",
     "Notification",
 ]

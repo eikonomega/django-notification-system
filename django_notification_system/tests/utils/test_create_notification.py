@@ -3,7 +3,7 @@ from django.test.testcases import TestCase
 from django.utils import timezone
 
 from website.notifications.models import (
-    Notification, Target, UserTarget, OptOut)
+    Notification, NotificationTarget, UserInNotificationTarget, NotificationOptOut)
 from website.notifications.utils.notifications_creators import (
     create_expo_notifications)
 
@@ -24,16 +24,16 @@ class TestCreateNotification(TestCase):
             last_name='Skeetington',
             password='Sure.')
 
-        self.target = Target.objects.create(
+        self.target = NotificationTarget.objects.create(
             name='Expo',
             class_name='Expo')
-        self.user_target1 = UserTarget.objects.create(
+        self.user_target1 = UserInNotificationTarget.objects.create(
             user=self.user_with_targets,
             target=self.target,
             user_target_id='291747127401',
             user_target_friendly_name='Happy Phone')
 
-        self.user_target2 = UserTarget.objects.create(
+        self.user_target2 = UserInNotificationTarget.objects.create(
             user=self.user_with_targets,
             target=self.target,
             user_target_id='92369ryweifwe',
@@ -63,7 +63,7 @@ class TestCreateNotification(TestCase):
         pre_function_notifications = Notification.objects.all()
         self.assertEqual(len(pre_function_notifications), 0)
 
-        OptOut.objects.create(user=self.user_with_targets)
+        NotificationOptOut.objects.create(user=self.user_with_targets)
 
         create_expo_notifications(self.user_with_targets,
                                   "Wow",
@@ -97,7 +97,7 @@ class TestCreateNotification(TestCase):
         pre_function_notifications = Notification.objects.all()
         self.assertEqual(len(pre_function_notifications), 0)
 
-        OptOut.objects.create(user=self.user_with_targets, has_opted_out=True)
+        NotificationOptOut.objects.create(user=self.user_with_targets, has_opted_out=True)
 
         create_expo_notifications(self.user_with_targets,
                                   "Wow",

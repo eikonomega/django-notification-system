@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from django_notification_system.exceptions import UserIsOptedOut
-from django_notification_system.models.user_target import UserTarget
+from django_notification_system.models.user_target import UserInNotificationTarget
 
 
 def check_for_user_opt_out(user: User):
@@ -31,9 +31,9 @@ def user_notification_targets(user: User, target_name: str):
         target_name (str): The name of the target to retrieve user targets for.
 
     Returns:
-        [UserTarget]: A Django queryset of UserTarget instances.
+        [UserInNotificationTarget]: A Django queryset of UserInNotificationTarget instances.
     """
-    return UserTarget.objects.filter(
+    return UserInNotificationTarget.objects.filter(
         user=user,
         target__name=target_name,
         active=True,

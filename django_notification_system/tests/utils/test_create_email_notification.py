@@ -4,7 +4,7 @@ from django.test.testcases import TestCase
 
 
 from website.notifications.models import (
-    Notification, Target, UserTarget)
+    Notification, NotificationTarget, UserInNotificationTarget)
 from website.notifications.utils.notifications_creators import (
     create_email_notifications)
 
