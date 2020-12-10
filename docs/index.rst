@@ -12,6 +12,7 @@ Django Notification System
    :maxdepth: 2
    :caption: Contents:
 
+   installation
    models
    management_commands
    utility_functions
