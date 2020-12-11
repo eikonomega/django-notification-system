@@ -16,6 +16,7 @@ Django Notification System
    models
    management_commands
    utility_functions
+   extending
 
 
 
