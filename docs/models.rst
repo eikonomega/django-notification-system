@@ -7,7 +7,7 @@ Notification Target
 A notification target represents something that can receive a notication from our system. 
 In this release of the package, we natively support Email, Twilio and Expo (push notifications) targets.
 
-Unless you are (JUSTIN: Link to "extending the system" ) you won't need to create any targets
+Unless you are :doc:`extending the system <../extending>` you won't need to create any targets
 that are not already pre-loaded during installation.
 
 Attributes
@@ -126,7 +126,7 @@ message for each target.
 
 For each of the built-in targets, we have already written these handlers.
 If you create additional targets, you'll need to write the corresponding handlers.
-See the [JUSTIN: Extending the System] page for more information.
+See the :doc:`extending the system <../extending>`  page for more information.
 
 Attributes
 ++++++++++

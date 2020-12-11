@@ -8,10 +8,14 @@ honest. We're crazy busy usually, so the chances that we will be able to do this
 great. However, if we see a request that we think would have a lot of mileage in it we 
 may take it up.
 
-If you want to try this method, just submit an issue on the Github repo (JUSTIN: link goes here).
+If you want to try this method, just submit an issue on the |github_repo|
+
+.. |github_repo| raw:: html
+
+   <a href="https://github.com/crcresearch/django-notification-system/issues/" target="_blank">Github repo.</a>
 
 Option 2: Writing custom notification creators and receivers.
-----
+-------------------------------------------------------------
 **Example: Creating a New Notification Target**
         .. code-block:: python
 
@@ -25,6 +29,6 @@ Option 2: Writing custom notification creators and receivers.
                     name='SMS', 
                     notification_module_name='sms')
 
-Option 3: Be a cool kid superstar. Write your own custom stuff and submit a PR to share with others.
-----
-
+Option 3: Be a cool kid superstar. 
+----------------------------------
+Write your own custom stuff and submit a PR to share with others.
