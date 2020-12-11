@@ -115,7 +115,7 @@ class Notification(CreatedModifiedAbstractModel):
                 "Status cannot be 'SCHEDULED' if there is an attempted delivery."
             )
 
-        if self.attempted_delivery and self.status != "SCHEDULED":
+        if not self.attempted_delivery and self.status not in ["SCHEDULED", "OPTED OUT"]:
             raise ValidationError(
                 "Attempted Delivery must be filled out if Status is {}".format(
                     self.status
