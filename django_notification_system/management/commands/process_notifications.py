@@ -70,27 +70,27 @@ class Command(BaseCommand):
         )
 
         # excludes all notifications where the user has NotificationOptOut object with has_opted_out=True
-        notifications = notifications.exclude(user_target__user__notification_opt_out__active=True)
+        notifications = notifications.exclude(target_user_record__user__notification_opt_out__active=True)
 
         # Loop through each notification and attempt to push it
         for notification in notifications:
             print(
-                f"{notification.user_target.user.username} - {notification.scheduled_delivery} - {notification.status}")
+                f"{notification.target_user_record.user.username} - {notification.scheduled_delivery} - {notification.status}")
             print(f"{notification.title} - {notification.body}")
 
-            if not notification.user_target.active:
+            if not notification.target_user_record.active:
                 notification.status = Notification.INACTIVE_DEVICE
                 notification.save()
             else:
                 notification_type = (
-                    notification.user_target.target.notification_module_name
+                    notification.target_user_record.target.notification_module_name
                 )
                 try:
                     # Use our function table to call the appropriate sending function
                     response_message = self.__function_table[notification_type](notification)
                 except KeyError:
                     print(
-                        f"invalid notification target name {notification.user_target.target.name}")
+                        f"invalid notification target name {notification.target_user_record.target.name}")
                 else:
                     # The notification was sent successfully
                     print(response_message)

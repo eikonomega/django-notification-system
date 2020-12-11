@@ -27,7 +27,7 @@ def send_notification(notification):
     try:
         response = PushClient().publish(
             PushMessage(
-                to=str(notification.user_target.user_target_id),
+                to=str(notification.target_user_record.target_user_id),
                 title=notification.title,
                 body=notification.body,
                 data=extra["data"],
@@ -94,9 +94,9 @@ def handle_push_response(notification, response):
         # flows.
         response.validate_response()
     except DeviceNotRegisteredError as e:
-        user_target = notification.user_target
-        user_target.active = False
-        user_target.save()
+        target_user_record = notification.target_user_record
+        target_user_record.active = False
+        target_user_record.save()
         return "{}: {}".format(type(e), e)
     except PushResponseError as e:
         check_and_update_retry_attempts(notification)

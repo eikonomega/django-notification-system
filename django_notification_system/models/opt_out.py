@@ -47,6 +47,6 @@ class NotificationOptOut(CreatedModifiedAbstractModel):
         if self.active:
             Notification.objects.filter(
                 status__in=[Notification.SCHEDULED, Notification.RETRY],
-                user_target__user=self.user,
+                target_user_record__user=self.user,
             ).update(status=Notification.OPTED_OUT)
         super(NotificationOptOut, self).save(*args, **kwargs)

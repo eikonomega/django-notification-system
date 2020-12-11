@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.test.testcases import TestCase
 
 
-from website.notifications.models import (
-    Notification, NotificationTarget, UserInNotificationTarget)
-from website.notifications.utils.notifications_creators import (
-    create_email_notifications)
+from django_notification_system.models import (
+    Notification, NotificationTarget, TargetUserRecord)
+from django_notification_system.notification_creators.email import (
+    create_notification)
 
 
 class TestCreateEmailNotification(TestCase):
@@ -28,6 +28,19 @@ class TestCreateEmailNotification(TestCase):
         # We call this to create the email user_target.
         self.user_with_targets.save()
 
+        self.target, created = NotificationTarget.objects.get_or_create(
+            name='Email',
+            notification_module_name='email'
+        )
+
+        self.target_user_record = TargetUserRecord.objects.create(
+            user=self.user_with_targets,
+            target=self.target,
+            target_user_id='sadboi@gmail.com',
+            description="Sad Boi's Email",
+            active=True
+        )
+
     def test_successfully_create_notifications(self):
         """
         This test checks that email notifications are created for all
@@ -36,11 +49,10 @@ class TestCreateEmailNotification(TestCase):
         pre_function_notifications = Notification.objects.all()
         self.assertEqual(len(pre_function_notifications), 0)
 
-        create_email_notifications(
+        create_notification(
             user=self.user_with_targets,
             title="Hi.",
-            template_path=(
-                "user_signup/emails/survey_repetition.html"))
+            body="Hello there, friend.")
 
         post_function_notifications = Notification.objects.all()
         self.assertEqual(len(post_function_notifications), 1)

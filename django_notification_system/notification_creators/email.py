@@ -56,9 +56,9 @@ def create_notification(
         else:
             raise UserIsOptedOut()
 
-    user_targets = user_notification_targets(user=user, target_name="Email")
+    target_user_records = user_notification_targets(user=user, target_name="Email")
 
-    if not user_targets:
+    if not target_user_records:
         if quiet:
             return
         else:
@@ -80,9 +80,9 @@ def create_notification(
         )
 
     notifications_created = []
-    for user_target in user_targets:
+    for target_user_record in target_user_records:
         notification, created = Notification.objects.get_or_create(
-            user_target=user_target,
+            target_user_record=target_user_record,
             title=title,
             scheduled_delivery=scheduled_delivery,
             defaults={

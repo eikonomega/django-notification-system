@@ -2,10 +2,11 @@ from django.contrib.auth.models import User
 from django.test.testcases import TestCase
 from django.utils import timezone
 
-from website.notifications.models import (
-    Notification, NotificationTarget, UserInNotificationTarget, NotificationOptOut)
-from website.notifications.utils.notifications_creators import (
-    create_expo_notifications)
+from django_notification_system.models import (
+    Notification, NotificationTarget, TargetUserRecord, NotificationOptOut)
+from django_notification_system.notification_creators.twilio import (
+    create_notification)
+from django_notification_system.exceptions import UserIsOptedOut, UserHasNoTargets
 
 
 class TestCreateNotification(TestCase):
@@ -24,20 +25,21 @@ class TestCreateNotification(TestCase):
             last_name='Skeetington',
             password='Sure.')
 
-        self.target = NotificationTarget.objects.create(
-            name='Expo',
-            class_name='Expo')
-        self.user_target1 = UserInNotificationTarget.objects.create(
-            user=self.user_with_targets,
-            target=self.target,
-            user_target_id='291747127401',
-            user_target_friendly_name='Happy Phone')
+        self.target, created = NotificationTarget.objects.get_or_create(
+            name='Twilio',
+            notification_module_name='twilio')
 
-        self.user_target2 = UserInNotificationTarget.objects.create(
+        self.user_target1 = TargetUserRecord.objects.create(
             user=self.user_with_targets,
             target=self.target,
-            user_target_id='92369ryweifwe',
-            user_target_friendly_name='Happier Phone')
+            target_user_id='2917471274',
+            description='Happy Phone')
+
+        self.user_target2 = TargetUserRecord.objects.create(
+            user=self.user_with_targets,
+            target=self.target,
+            target_user_id='2917471271',
+            description='Happier Phone')
 
     def test_successfully_create_expo_notificationss(self):
         """
@@ -47,10 +49,9 @@ class TestCreateNotification(TestCase):
         pre_function_notifications = Notification.objects.all()
         self.assertEqual(len(pre_function_notifications), 0)
 
-        create_expo_notifications(self.user_with_targets,
-                                  "Wow",
-                                  "You really did it!",
-                                  timezone.now())
+        create_notification(user=self.user_with_targets,
+                            title="Wow",
+                            body="You really did it!")
 
         post_function_notifications = Notification.objects.all()
         self.assertEqual(len(post_function_notifications), 2)
@@ -65,10 +66,9 @@ class TestCreateNotification(TestCase):
 
         NotificationOptOut.objects.create(user=self.user_with_targets)
 
-        create_expo_notifications(self.user_with_targets,
-                                  "Wow",
-                                  "You really did it!",
-                                  timezone.now())
+        create_notification(user=self.user_with_targets,
+                            title="Wow",
+                            body="You really did it!")
 
         post_function_notifications = Notification.objects.all()
         self.assertEqual(len(post_function_notifications), 2)
@@ -81,10 +81,12 @@ class TestCreateNotification(TestCase):
         pre_function_notifications = Notification.objects.all()
         self.assertEqual(len(pre_function_notifications), 0)
 
-        create_expo_notifications(self.user_without_target,
-                                  "Wow",
-                                  "You really did it!",
-                                  timezone.now())
+        try:
+            create_notification(user=self.user_without_target,
+                                title="Wow",
+                                body="You really did it!")
+        except UserHasNoTargets:
+            pass
 
         post_function_notifications = Notification.objects.all()
         self.assertEqual(len(post_function_notifications), 0)
@@ -97,12 +99,14 @@ class TestCreateNotification(TestCase):
         pre_function_notifications = Notification.objects.all()
         self.assertEqual(len(pre_function_notifications), 0)
 
-        NotificationOptOut.objects.create(user=self.user_with_targets, has_opted_out=True)
+        NotificationOptOut.objects.create(user=self.user_with_targets, active=True)
 
-        create_expo_notifications(self.user_with_targets,
-                                  "Wow",
-                                  "You really did it!",
-                                  timezone.now())
+        try:
+            create_notification(user=self.user_with_targets,
+                                title="Wow",
+                                body="You really did it!")
+        except UserIsOptedOut:
+            pass
 
         post_function_notifications = Notification.objects.all()
         self.assertEqual(len(post_function_notifications), 0)

@@ -4,10 +4,10 @@ from django.test.testcases import TestCase
 from django.utils import timezone
 
 
-from website.notifications.models import (
-    Notification, NotificationTarget, UserInNotificationTarget)
-from website.notifications.utils.notification_handlers import (
-    send_email)
+from django_notification_system.models import (
+    Notification, NotificationTarget, TargetUserRecord)
+from django_notification_system.notification_handlers.email import (
+    send_notification)
 
 
 class TestCreateEmailNotification(TestCase):
@@ -19,10 +19,16 @@ class TestCreateEmailNotification(TestCase):
             password='Ok.',
             email='sadboi@gmail.com')
 
-        self.user_with_target.save()
+        self.target_user_record = TargetUserRecord.objects.create(
+            user=self.user_with_target,
+            target=NotificationTarget.objects.get(name='Email'),
+            target_user_id='sadboi@gmail.com',
+            description='Sad Bois Email',
+            active=True
+        )
 
         self.notification = Notification.objects.create(
-            user_target=UserInNotificationTarget.objects.get(user=self.user_with_target),
+            target_user_record=self.target_user_record,
             title="Hi.",
             body="<b>It me. Is it me?</b>",
             status='SCHEDULED',
@@ -36,6 +42,6 @@ class TestCreateEmailNotification(TestCase):
         self.assertEqual(pre_function_notification[0].status,
                          'SCHEDULED')
 
-        response_message = send_email(self.notification)
+        response_message = send_notification(self.notification)
 
         self.assertEqual(response_message, 'Email Successfully Sent')
