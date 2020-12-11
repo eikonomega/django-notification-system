@@ -26,8 +26,8 @@ notification_module_name str      The name of the module in the notification_cre
                     name='SMS', 
                     notification_module_name='sms')
                 
-User Target
------------
+User In Notification Target
+---------------------------
 Each user will have a unique ID for each notification target, which is how we identify the individual 
 who will receive the notification.
 
@@ -85,8 +85,8 @@ UserInNotificationTarget for this User or update their email UserInNotificationT
                 new_user_target = UserInNotificationTarget.reset_email_target(user)
 
 
-NotificationOptOut
-------
+Notification Opt Out
+--------------------
 Users who have opted-out of communications will have an instance of this model.
 
 Attributes
@@ -122,19 +122,19 @@ A Notification is a representation of a notification in the database.
 
 Attributes
 ++++++++++
-=================== =========== =================================================================================================================
-**Key**             **Type**    **Description**
-user_target         UserInNotificationTarget  The UserInNotificationTarget associated with notification
-title               str         The title for the notification. Exact representation depends on the target.
-body                str         The main message of the notification to be sent.
-extra               dict        A dictionary of extra data to be sent to the notification processor. Valid keys are determined by each processor.
-status              str         The status of Notification. Options are: 'SCHEDULED', 'DELIVERED', 'DELIVERY_FAILURE', 'RETRY', 'INACTIVE_DEVICE'
-scheduled_delivery  DateTime    Day and time Notification is to be sent.
-attempted_delivery  DateTime    Day and time attempted to deliver Notification.
-retry_time_interval PositiveInt If a notification fails, this is the amount of time to wait until retrying to send it.
-retry_attempts      PositiveInt The number of retries that have been attempted.
-max_retries         PositiveInt The max number of allowed retries.
-=================== =========== =================================================================================================================
+=================== ======================== =================================================================================================================
+**Key**             **Type**                 **Description**
+user_target         UserInNotificationTarget The UserInNotificationTarget associated with notification
+title               str                      The title for the notification. Exact representation depends on the target.
+body                str                      The main message of the notification to be sent.
+extra               dict                     A dictionary of extra data to be sent to the notification processor. Valid keys are determined by each processor.
+status              str                      The status of Notification. Options are: 'SCHEDULED', 'DELIVERED', 'DELIVERY_FAILURE', 'RETRY', 'INACTIVE_DEVICE'
+scheduled_delivery  DateTime                 Day and time Notification is to be sent.
+attempted_delivery  DateTime                 Day and time attempted to deliver Notification.
+retry_time_interval PositiveInt              If a notification fails, this is the amount of time to wait until retrying to send it.
+retry_attempts      PositiveInt              The number of retries that have been attempted.
+max_retries         PositiveInt              The max number of allowed retries.
+=================== ======================== =================================================================================================================
 
 **Example Usage**
         .. code-block:: python
