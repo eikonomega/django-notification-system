@@ -28,13 +28,19 @@ in the :doc:`extending the system <../extending>`. So just a quick intro here.
 
                 # A list of locations for the system to search for notification creators. 
                 # You can just create the list and leave it empty if you want to just put this in place.
-                NOTIFICATION_SYSTEM_CREATORS=[
+                NOTIFICATION_SYSTEM_CREATORS = [
                     '/path/to/creator_modules', 
                     '/another/path/to/creator_modules']
                     
                 # A list of locations for the system to search for notification handlers. 
                 # You can just create the list and leave it empty if you want to just put this in place.
-                NOTIFICATION_SYSTEM_HANDLERS=[
+                NOTIFICATION_SYSTEM_HANDLERS = [
                     '/path/to/handler_modules', 
                     '/another/path/to/handler_modules']
+                
+                # Twilio Required settings, if you're not planning on using Twilio these can be settings
+                # to empty strings
+                TWILIO_ACCOUNT_SID = 'FAKE_SID_FOR_DEMO_PURPOSES'
+                TWILIO_AUTH_TOKEN = 'FAKE_TOKEN_FOR_DEMO_PURPOSES'
+                TWILIO_SENDER = '+15555555555'
                 

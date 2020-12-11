@@ -20,8 +20,8 @@ def send_notification(notification):
         twilio_account_sid = settings.TWILIO_ACCOUNT_SID
         twilio_auth_token = settings.TWILIO_AUTH_TOKEN
 
-        twilio_sender = "+1" + settings.TWILIO_SENDER
-        twilio_receiver = "+1" + notification.target_user_record.target_user_id
+        twilio_sender = settings.TWILIO_SENDER
+        twilio_receiver = notification.target_user_record.target_user_id
 
         client = Client(twilio_account_sid, twilio_auth_token)
 
