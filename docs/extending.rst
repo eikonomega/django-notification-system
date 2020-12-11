@@ -12,7 +12,7 @@ If you want to try this method, just submit an issue on the |github_repo|
 
 .. |github_repo| raw:: html
 
-   <a href="https://github.com/crcresearch/django-notification-system/issues/" target="_blank">Github repo.</a>
+   <a href="https://github.com/crcresearch/django-notification-system/" target="_blank">Github repo.</a>
 
 Option 2: Writing custom notification creators and receivers.
 -------------------------------------------------------------
