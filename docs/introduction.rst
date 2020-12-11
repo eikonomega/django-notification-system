@@ -1,7 +1,9 @@
 Perhaps you've got a Django application that you'd like to send notifications from? 
 
-Well, we certainly have, and we're tired of writing code to create and send various
-types of messages over and over again! So, we've created this package to simplify things
+Well, we certainly have our share of them. And guess what? We're tired of writing code to create and send various
+types of messages over and over again! 
+
+So, we've created this package to simplify things
 a bit for future projects. Hopefully, it will help you too.
 
 **Here's the stuff you get:**
@@ -10,7 +12,7 @@ a bit for future projects. Hopefully, it will help you too.
 
   * `Notification`: A single notification. Flexible enough to handle many different types of notifications.
   * `NotificationTarget`: A target for notifications. Email, SMS, etc.
-  * `UserInNotificationTarget`: Info about the user in a given target (Ex. Your "address" in the "email" target).
+  * `TargetUserRecord`: Info about the user in a given target (Ex. Your "address" in the "email" target).
   * `NotificationOptOut`: Single location to keep track of user opt outs. You don't want the spam police after you.
 
 2. Built in support for email, Twilio SMS, and Expo push notifications. More information link here.

@@ -1,0 +1,11 @@
+colgroup > col {
+  width: fit-content !important;
+}
+
+td > p {
+  font-size: 14px;
+}
+
+tr td:last-child > p {
+  white-space: normal;
+}

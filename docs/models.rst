@@ -1,62 +1,62 @@
 Django Notification System Models
 =================================
-Target
+There are 4 models that the library will install in your application.
+
+Notification Target
 ------
-A target represents something that can receive a notication from our system. Our system comes with 
-three existing targets (Email, Twilio and Expo).
+A notification target represents something that can receive a notication from our system. 
+In this release of the package, we natively support Email, Twilio and Expo (push notifications) targets.
+
+Unless you are (JUSTIN: Link to "extending the system" ) you won't need to create any targets
+that are not already pre-loaded during installation.
 
 Attributes
 ++++++++++
 ======================== ======== =========================================================================================================================
 **Key**                  **Type** **Description**
+id                       uuid     Auto-generated record UUID. 
 name                     str      The human friendly name for the target.
-notification_module_name str      The name of the module in the notification_creators directory which will be used to create notifications for this target.
+notification_module_name str      The name of the module in the NOTIFICATION_SYSTEM_CREATORS & 
+                                  NOTIFICATION_SYSTEM_HANDLERS directories which will be used to 
+                                  create and process notifications for this target.
 ======================== ======== =========================================================================================================================
 
-**Example Usage**
-        .. code-block:: python
-
-                from django_notification_system.models import NotificationTarget
-
-                # Note: The notification_module_name will be the name of the module you have in the
-                # directory you have specified in your settings file.
-                # Example: if in my settings I have the NOTIFICATION_SYSTEM_HANDLERS = [BASE_DIR / "extra_handlers"],
-                # and inside that directory I have a file called 'sms.py', the notification_module_name will be 'sms'
-                target = NotificationTarget.objects.create(
-                    name='SMS', 
-                    notification_module_name='sms')
                 
-User In Notification Target
----------------------------
-Each user will have a unique ID for each notification target, which is how we identify the individual 
-who will receive the notification.
+Target User Record
+-----------
+Each notification target will have an internal record for each of your users. For example, an email server would have a record
+of all the valid email addresses that it supports. This model is used to tie a Django user in your database to it's representation 
+in a given `NotificationTarget`.
 
-For example, for an email target, we need to store the user's email address.
+For example, for the built-in email target, we need to store the user's email address on a `TargetUserRecord` instance so that
+when we can the email `NotificationTarget` the correct address to send email notifications to for a given user.
 
 Attributes
 ++++++++++
-============== =========== ============================================================================================================
+============== =========== ===============================================================================================================
 **Key**        **Type**    **Description**
-user           Django User The User/Custom User instance associated with this record.
-target         foreign key The associated target instance.
+id             uuid        Auto-generated record UUID. 
+user           Django User The Django user instance associated with this record.
+target         foreign key The associated notification target instance.
 target_user_id str         The ID used in the target to uniquely identify the user.
 description    str         A human friendly note about the user target.
-active         boolean     Indicator of whether user target is active or not. For example, we have an outdated email record for a user.
-============== =========== ============================================================================================================
+active         boolean     Indicator of whether user target is active or not. For example, we may have an outdated email record for a user.
+============== =========== ================================================================================================================
 
-**Example Usage**
+**Example Usage: Creating a Target User Record**
         .. code-block:: python
                 
                 from django.contrib.auth import get_user_model
                 
-                from django_notification_system.models import NotificationTarget, UserInNotificationTarget
+                from django_notification_system.models import NotificationTarget, TargetUserRecord
 
+                # Let's assume for our example here that your user model has a `phone_number` attribute.
                 User = get_user_model()
                 
                 user = User.objects.get(first_name="Eggs", last_name="Benedict")
                 target = NotificationTarget.objects.get(name='Twilio')
                 
-                user_target = UserInNotificationTarget.objects.create(
+                user_target = TargetUserRecord.objects.create(
                     user=user,
                     target=target,
                     target_user_id=user.phone_number,
