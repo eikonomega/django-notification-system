@@ -57,36 +57,5 @@ class TargetUserRecord(CreatedModifiedAbstractModel):
             )
         ]
 
-    @staticmethod
-    def reset_email_target(user):
-        """
-        sets the user's email target to their current email
-        Parameters
-        ----------
-        user: a user
-        """
-        email_target, created = NotificationTarget.objects.get_or_create(
-            name="Email", notification_module_name="email"
-        )
-
-        with transaction.atomic():
-            # using atomic so user always has a valid email
-            # Mark all their previous emails as inactive
-            TargetUserRecord.objects.filter(
-                user=user,
-                target=email_target,
-            ).update(active=False)
-
-            TargetUserRecord.objects.update_or_create(
-                user=user,
-                target=email_target,
-                target_user_id=user.email,
-                defaults={
-                    "active": True,
-                    "description": f"{user.first_name} {user.last_name}'s Email",
-                },
-            )
-        return
-
     def __str__(self):
         return "{}: {}".format(self.user.username, self.description)

@@ -1,12 +1,12 @@
 Django Notification System Management Commands
 ==============================================
-Create Email User Targets
--------------------------
-The purpose of this command is to retroactively create an email user target for each user
+Create Email Target User Records
+--------------------------------
+The purpose of this command is to retroactively create an email target user record for each user
 currently in your database. After initial installation of this package, we can see that the ``User Targets`` section
 of our admin panel is empty.
 
-.. figure::  images/create_email_user_targets/create_email_user_targets_1.png
+.. figure::  images/create_email_target_user_records/create_email_target_user_records_1.png
     :align:   center
     :scale: 25%
 
@@ -15,12 +15,12 @@ Oh no!
 FEAR NOT! In your terminal, run the command:
 
 .. parsed-literal::
-        $ python manage.py create_email_user_targets
+        $ python manage.py create_email_target_user_records
 
 After the command has been run, navigate to ``http://localhost/admin/django_notification_system/usertarget/``.
 You should see a newly created UserInNotificationTarget for each user currently in the DB.
 
-.. figure::  images/create_email_user_targets/create_email_user_targets_2.png
+.. figure::  images/create_email_target_user_records/create_email_target_user_records_2.png
     :align:   center
     :scale: 25%
 

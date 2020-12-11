@@ -3,7 +3,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from six import StringIO
 
-from django_notification_system.management.commands.create_email_user_targets import Command
+from django_notification_system.management.commands.create_email_target_user_records import Command
 from django_notification_system.models import TargetUserRecord
 
 cmd = Command()
@@ -18,7 +18,7 @@ class TestCommand(TestCase):
             last_name="Sauce",
             password="ImpressivePassword")
 
-    def test_create_email_user_targets(self):
+    def test_create_email_target_user_records(self):
         """
         Ensure command is functioning correctly.
         """
@@ -29,7 +29,7 @@ class TestCommand(TestCase):
         self.assertEqual(len(pre_call), 0)
 
         out = StringIO()
-        call_command('create_email_user_targets', stdout=out)
+        call_command('create_email_target_user_records', stdout=out)
 
         post_call = TargetUserRecord.objects.all()
         self.assertEqual(len(post_call), 1)

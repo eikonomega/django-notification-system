@@ -64,26 +64,6 @@ active         boolean     Indicator of whether user target is active or not. Fo
                     active=True
                 )
 
-**Class method**
-
-There is a ``reset_email_target`` method that can be used on this model. This will either create an email
-UserInNotificationTarget for this User or update their email UserInNotificationTarget if the User email has been updated.
-
-**Example Usage**
-        .. code-block:: python
-                
-                from django.contrib.auth import get_user_model
-                
-                from django_notification_system.models import UserInNotificationTarget
-
-                User = get_user_model()
-                
-                user = User.objects.get(first_name="Eggs", last_name="Benedict")
-                user.email = 'egg@egg.egg'
-                user.save()
-
-                new_user_target = UserInNotificationTarget.reset_email_target(user)
-
 
 Notification Opt Out
 --------------------
