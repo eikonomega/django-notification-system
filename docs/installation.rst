@@ -38,7 +38,7 @@ in the :doc:`extending the system <../extending>`. So just a quick intro here.
                     '/path/to/handler_modules', 
                     '/another/path/to/handler_modules']
                 
-                # Twilio Required settings, if you're not planning on using Twilio these can be settings
+                # Twilio Required settings, if you're not planning on using Twilio these can be set
                 # to empty strings
                 TWILIO_ACCOUNT_SID = 'FAKE_SID_FOR_DEMO_PURPOSES'
                 TWILIO_AUTH_TOKEN = 'FAKE_TOKEN_FOR_DEMO_PURPOSES'
