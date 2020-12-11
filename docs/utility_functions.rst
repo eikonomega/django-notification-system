@@ -179,3 +179,105 @@ The above example will create a Notification with the following values:
 .. figure::  images/utility_functions/create_twilio_notification.png
     :align:   center
     :scale: 25%
+
+
+Notification Handler Functions
+++++++++++++++++++++++++++++++
+Email
+-----
+**Import example**
+        .. code-block:: python
+                
+                from django_notification_system.notification_handlers.email import send_notification
+
+**Parameters**
+    ============ ============ ============================
+    **Key**      **Type**     **Description**
+    notification Notification The notification to be sent.
+    ============ ============ ============================
+
+**Example Usage**
+        .. code-block:: python
+                
+                from django.utils import timezone
+
+                from django_notification_system.models import Notification
+                from django_notification_system.notification_handlers.email import send_notification
+                
+
+                notifications_to_send = Notification.objects.filter(
+                    target_user_record__target__name='Email',
+                    status='SCHEDULED',
+                    scheduled_delivery__lte=timezone.now())
+                
+                for notification in notifications_to_send:
+                    send_notification(notification)
+
+The above example will send all email notifications that are scheduled now or earlier. This will update
+all of these Notification records with their new status and attempted_delivery times.
+
+Expo
+----
+**Import example**
+        .. code-block:: python
+                
+                from django_notification_system.notification_handlers.expo import send_notification
+
+**Parameters**
+    ============ ============ ============================
+    **Key**      **Type**     **Description**
+    notification Notification The notification to be sent.
+    ============ ============ ============================
+
+**Example Usage**
+        .. code-block:: python
+                
+                from django.utils import timezone
+
+                from django_notification_system.models import Notification
+                from django_notification_system.notification_handlers.expo import send_notification
+
+                
+                notifications_to_send = Notification.objects.filter(
+                    target_user_record__target__name='Expo',
+                    status='SCHEDULED',
+                    scheduled_delivery__lte=timezone.now())
+                
+                for notification in notifications_to_send:
+                    send_notification(notification)
+
+The above example will send all Expo notifications that are scheduled now or earlier. This will update
+all of these Notification records with their new status and attempted_delivery times.
+
+Twilio
+------
+**Import example**
+        .. code-block:: python
+                
+                from django_notification_system.notification_handlers.twilio import send_notification
+
+**Parameters**
+    ============ ============ ============================
+    **Key**      **Type**     **Description**
+    notification Notification The notification to be sent.
+    ============ ============ ============================
+
+**Example Usage**
+        .. code-block:: python
+                
+                from django.utils import timezone
+
+                from django_notification_system.models import Notification
+                from django_notification_system.notification_handlers.twilio import send_notification
+
+                
+                notifications_to_send = Notification.objects.filter(
+                    target_user_record__target__name='Twilio',
+                    status='SCHEDULED',
+                    scheduled_delivery__lte=timezone.now())
+                
+                for notification in notifications_to_send:
+                    send_notification(notification)
+
+The above example will send all Twilio notifications that are scheduled now or earlier. This will update
+all of these Notification records with their new status and attempted_delivery times.
