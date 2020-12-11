@@ -7,7 +7,7 @@ Notification Target
 A notification target represents something that can receive a notication from our system. 
 In this release of the package, we natively support Email, Twilio and Expo (push notifications) targets.
 
-Unless you are (JUSTIN: Link to extending the system ) you won't need to create any targets
+Unless you are (JUSTIN: Link to "extending the system" ) you won't need to create any targets
 that are not already pre-loaded during installation.
 
 Attributes
@@ -16,8 +16,9 @@ Attributes
 **Key**                  **Type** **Description**
 id                       uuid     Auto-generated record UUID. 
 name                     str      The human friendly name for the target.
-notification_module_name str      The name of the module in the NOTIFICATION_SYSTEM_CREATORS & NOTIFICATION_SYSTEM_HANDLERS 
-                                  directories which will be used to create and process notifications for this target.
+notification_module_name str      The name of the module in the NOTIFICATION_SYSTEM_CREATORS & 
+                                  NOTIFICATION_SYSTEM_HANDLERS directories which will be used to 
+                                  create and process notifications for this target.
 ======================== ======== =========================================================================================================================
 
                 
