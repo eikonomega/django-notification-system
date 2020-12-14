@@ -9,7 +9,6 @@ from .models import (
     NotificationTarget,
     TargetUserRecord,
 )
-from .utils.opt_out_link import get_opt_out_link
 from .utils.admin_site_utils import (
     MeOrAllFilter,
     is_null_filter_factory,
