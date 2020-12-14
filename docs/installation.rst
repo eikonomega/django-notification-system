@@ -22,6 +22,10 @@ in the :doc:`extending the system <../extending>`. So just a quick intro here.
 **Django Settings Additions**
         .. code-block:: python
 
+                INSTALLED_APPS = [
+                    "django_notification_system",
+                    ...
+                ]
                 # Add the following variables to your Django settings if 
                 # you want to write modules to support additional notification 
                 # types not included the library. 
