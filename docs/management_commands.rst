@@ -1,73 +1,83 @@
-Django Notification System Management Commands
+Management Commands
 ==============================================
-Create Email Target User Records
---------------------------------
-The purpose of this command is to retroactively create an email target user record for each user
-currently in your database. After initial installation of this package, we can see that the ``User Targets`` section
-of our admin panel is empty.
 
-.. figure::  images/create_email_target_user_records/create_email_target_user_records_1.png
-    :align:   center
-    :scale: 25%
-
-Oh no!
-
-FEAR NOT! In your terminal, run the command:
-
-.. parsed-literal::
-        $ python manage.py create_email_target_user_records
-
-After the command has been run, navigate to ``http://localhost/admin/django_notification_system/usertarget/``.
-You should see a newly created UserInNotificationTarget for each user currently in the DB.
-
-.. figure::  images/create_email_target_user_records/create_email_target_user_records_2.png
-    :align:   center
-    :scale: 25%
-
-These user targets are now available for all of your notification needs.
-
+Alright friends, in additional to all the goodies we've already
+talked about, we've got a couple of management commands to make 
+your life easier. Like, a lot easier.
 
 Process Notifications
 ---------------------
-The purpose of this command is to send out all notifications scheduled for delivery before the current 
-date and time.
+This is the big kahuna of the entire system. When run, this command 
+will attempt to deliver all notifications with a status of `SCHEDULED` 
+or `RETRY` whose ``scheduled_delivery`` attribute is anytime before the 
+command was invoked.
 
-First, we'll need to have some Notifications in our database in order for this command to send anything.
+How to Run it
++++++++++++++
+.. parsed-literal::
+        $ python manage.py process_notifications
 
-**Creating Notifications**
+Make Life Easy for Yourself
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Once you've ironed out any potential kinks in your system, 
+consider setting up a CRON schedule for this command that runs
+at an appropriate interval for your application. After that,
+your notifications will fly off your database shelves to your
+users without any further work on your end.
 
-        .. code-block:: python
-                
-                from django.contrib.auth import get_user_model
-                from django.utils import timezone
-                
-                from django_notification_system.models import UserInNotificationTarget, Notification
+Important: If You Have Custom Notification Targets
+++++++++++++++++++++++++++++++++++++++++++++++++++
+If you have created custom notification targets, you MUST have 
+created the appropriate handler modules. You can find about how 
+to do this here. [JUSTIN: LINK TO EXTENDING PAGE.]
 
-                User = get_user_model()
-                
-                user = User.objects.get(first_name="Eggs", last_name="Benedict")
+If this isn't done, no notifications for custom targets will be sent.
 
-                # Let's assume this user has 3 UserInNotificationTarget objects, one for Expo, one for Twilio and
-                # one for Email.
-                user_targets = UserInNotificationTarget.objects.filter(
-                    user=user)
+Example Usage
+-------------
 
-                # We'll loop through these targets and create a basic Notification for each one.
-                for user_target in user_targets:
-                    Notification.objects.create(
-                        user_target=user_target,
-                        title=f"Test notification for {user.first_name} {user.last_name}",
-                        body="lorem ipsum...",
-                        status="SCHEDULED,
-                        scheduled_delivery=timezone.now()
-                    )
 
-Now we have three Notifications ready to send. Sending these is as simple as running this command:
+Creating Notifications
+    .. code-block:: python   
+        
+        # First, we'll need to have some Notifications in our database 
+        # in order for this command to send anything.
+        from django.contrib.auth import get_user_model
+        from django.utils import timezone
+        
+        from django_notification_system.models import (
+            TargetUserRecord, Notification)
+
+        User = get_user_model()
+        
+        user = User.objects.get(first_name="Eggs", last_name="Benedict")
+
+        # Let's assume this user has 3 TargetUserRecord objects, 
+        # one for Expo, one for Twilio and one for Email.
+        user_targets = TargetUserRecord.objects.filter(
+            user=user)
+
+        # We'll loop through these targets and create a basic notification 
+        # instance for each one.
+        for user_target in user_targets:
+            Notification.objects.create(
+                user_target=user_target,
+                title=f"Test notification for {user.first_name} {user.last_name}",
+                body="lorem ipsum...",
+                status="SCHEDULED,
+                scheduled_delivery=timezone.now()
+            )
+
+Now we have three Notifications ready to send. Let's run the command.
 
 .. parsed-literal::
         $ python manage.py process_notifications
 
-After running this command, you should see the following output in your terminal:
+
+If all was successful, you will see the output below. What this means 
+is that all Notifications (1) were sent and (2) have been updated 
+to have a ``status`` of 'DELIVERED' and an ``attempted_delivery`` set 
+to the time it was sent. 
 
 .. parsed-literal::
         egg - 2020-12-06 19:57:38+00:00 - SCHEDULED
@@ -83,7 +93,40 @@ After running this command, you should see the following output in your terminal
         Notification Successfully Pushed!
         *********************************
 
-If all was successful, you will see the above output. This means that everything succeeded, all Notifications
-that were sent have been updated to have a ``status`` of 'DELIVERED' with an ``attempted_delivery`` to the time it was sent.
-If any error occurs, that will be captured in the output. Based on the retry attributes, the notification will try sending
-the next time the command is called.
+If any error occurs, that will be captured in the output. 
+Based on the ``retry`` attribute, the affected notification(s) 
+will try sending the next time the command is invoked.
+
+
+Create Email Target User Records
+--------------------------------
+The purpose of this command is to create an email target user record for each user
+currently in your database or update them if they already exist. We do this by
+inspecting the ``email`` attribute of the user object and creating/updating the 
+corresponding notification system models as needed.
+
+After initial installation of this package, we can see that the ``User Targets`` 
+section of our admin panel is empty.
+
+.. figure::  images/create_email_target_user_records/create_email_target_user_records_1.png
+    :align:   center
+    :scale: 25%
+
+Oh no!
+
+FEAR NOT! In your terminal, run the command:
+
+.. parsed-literal::
+        $ python manage.py create_email_target_user_records
+
+After the command has been run, navigate to ``http://yoursite/admin/django_notification_system/usertarget/``.
+You should see a newly created UserInNotificationTarget for each user currently 
+in the DB.
+
+.. figure::  images/create_email_target_user_records/create_email_target_user_records_2.png
+    :align:   center
+    :scale: 25%
+
+These user targets are now available for all of your notification needs.
+
+

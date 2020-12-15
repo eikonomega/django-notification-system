@@ -118,7 +118,9 @@ This model represents a notification in the database. SHOCKING!
 Thus far, we've found this model to be flexible enough to handle 
 any type of notification. Hopefully, you will find the same.
 
-**Core Concept**
+Core Concept
+++++++++++++
+
 Each type of notification target must have a corresponding handler module that
 will process notifications that belong to that target. These handlers interpret 
 the various attributes of a `Notification` instance to construct a valid
