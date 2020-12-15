@@ -85,7 +85,7 @@ in the [extending the system section of our docs][docs-ext]. So just a quick int
 
 
 [pypi-version]: https://img.shields.io/pypi/v/django-notification-system.svg
-[pypi]: https://pypi.org/project/django-notification-system/1.1.0/
+[pypi]: https://pypi.org/project/django-notification-system/
 [docs]: https://django-notification-system.readthedocs.io/en/latest/
 [docs-ext]: https://django-notification-system.readthedocs.io/en/latest/extending.html
 [docs-util]: https://django-notification-system.readthedocs.io/en/latest/utility_functions.html
