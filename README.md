@@ -6,7 +6,7 @@
 
 Full documentation for the package is avalaible at https://django-notification-system.readthedocs.io/en/latest/
 
-**Overview**
+# Overview
 
 Perhaps you've got a Django application that you'd like to send notifications from? 
 
@@ -36,7 +36,7 @@ a bit for future projects. Hopefully, it will help you too.
 
 *Brought to you by the cool kids (er, kids that wanted to be cool) in the Center for Research Computing at Notre Dame.*
 
-**Requirements**
+# Requirements
 
 * Python (3.5, 3.6, 3.7, 3.8)
 * Django (3.1+)
@@ -44,11 +44,11 @@ a bit for future projects. Hopefully, it will help you too.
 We **highly recommend** and only officially support the latest patch release of
 each Python and Django series.
 
-**Installation**
+# Installation
 
 ``pip install django-notification-system``
 
-**Post-Install Setup (Optional)**
+# Post-Install Setup (Optional)
 
 If you would like to add support for addition types of notifications that don't exist in the package yet, 
 you'll need to add the following items to your Django settings. We will cover these items in more detail
