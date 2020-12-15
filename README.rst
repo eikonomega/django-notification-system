@@ -44,7 +44,7 @@ each Python and Django series.
 
 **Installation**
 
-`pip install django-notification-system`
+``pip install django-notification-system``
 
 **Post-Install Setup (Optional)**
 If you would like to add support for addition types of notifications that don't exist in the package yet, 
