@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 
+def read(f):
+    return open(f, 'r', encoding='utf-8').read()
+
 setup(
     # This is the name of your project. The first time you publish this
     # package, this name will be registered for you. It will determine how
@@ -20,12 +23,15 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0',  # Required
+    version='1.1.0',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
     description='Notification functionality to use within Django',  # Required
+
+    long_description=read('README.md'),
+    long_description_content_type='text/markdown',
 
     # This should be a valid link to your project's main homepage.
     #
