@@ -4,7 +4,7 @@
 
 **Finally, an awesome Django Notification System.**
 
-Full documentation for the package is avalaible at [https://django-notification-system.readthedocs.io/en/latest/][docs]
+Full documentation for the package is avalaible at [https://django-notification-system.readthedocs.io/en/latest/]
 
 # Overview
 
@@ -18,14 +18,14 @@ a bit for future projects. Hopefully, it will help you too.
 
 **Here's the stuff you get:**
 
-1. A few Django :doc:`models<../models>` that are pretty important:
+1. A few Django models that are pretty important:
 
   * `Notification`: A single notification. Flexible enough to handle many different types of notifications.
   * `NotificationTarget`: A target for notifications. Email, SMS, etc.
   * `TargetUserRecord`: Info about the user in a given target (Ex. Your "address" in the "email" target).
   * `NotificationOptOut`: Single location to keep track of user opt outs. You don't want the spam police after you.
 
-2. Built in support for :doc:`email, Twilio SMS, and Expo push notifications. <../utility_functions>`.
+2. Built in support for email, Twilio SMS, and Expo push notifications.
 3. Some cool management commands that:
 
   * Process all pending notifications.
