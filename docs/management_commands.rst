@@ -34,8 +34,7 @@ to do this here. [JUSTIN: LINK TO EXTENDING PAGE.]
 If this isn't done, no notifications for custom targets will be sent.
 
 Example Usage
--------------
-
++++++++++++++
 
 Creating Notifications
     .. code-block:: python   
