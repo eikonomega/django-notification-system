@@ -4,7 +4,7 @@
 
 **Finally, an awesome Django Notification System.**
 
-Full documentation for the package is avalaible at [https://django-notification-system.readthedocs.io/en/latest/]
+Full documentation for the package is avalaible at [https://django-notification-system.readthedocs.io/en/latest/][docs]
 
 # Overview
 
@@ -43,3 +43,9 @@ a bit for future projects. Hopefully, it will help you too.
 
 We **highly recommend** and only officially support the latest patch release of
 each Python and Django series.
+
+
+
+[pypi]: https://pypi.org/project/djangorestframework/
+[pypi-version]: https://img.shields.io/pypi/v/djangorestframework.svg
+[docs]: https://django-notification-system.readthedocs.io/en/latest/
