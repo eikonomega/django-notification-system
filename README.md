@@ -1,4 +1,6 @@
-**Django Notification System**
+# [Django Notification System][docs]
+[![pypi-version]][pypi]
+
 
 **Finally, an awesome Django Notification System.**
 
@@ -23,7 +25,7 @@ a bit for future projects. Hopefully, it will help you too.
   * `TargetUserRecord`: Info about the user in a given target (Ex. Your "address" in the "email" target).
   * `NotificationOptOut`: Single location to keep track of user opt outs. You don't want the spam police after you.
 
-2. Built in support for email, Twilio SMS, and Expo push notifications.
+2. Built in support for [email, Twilio SMS, and Expo push notifications][docs-util].
 3. Some cool management commands that:
 
   * Process all pending notifications.
@@ -50,7 +52,7 @@ each Python and Django series.
 
 If you would like to add support for addition types of notifications that don't exist in the package yet, 
 you'll need to add the following items to your Django settings. We will cover these items in more detail
-in the extending the system. So just a quick intro here.
+in the [extending the system][docs-ext]. So just a quick intro here.
 
 **Django Settings Additions**
         .. code-block:: python
@@ -80,3 +82,10 @@ in the extending the system. So just a quick intro here.
                 TWILIO_ACCOUNT_SID = 'FAKE_SID_FOR_DEMO_PURPOSES'
                 TWILIO_AUTH_TOKEN = 'FAKE_TOKEN_FOR_DEMO_PURPOSES'
                 TWILIO_SENDER = '+15555555555'
+
+
+[pypi-version]: https://img.shields.io/pypi/v/django-notification-system.svg
+[pypi]: https://pypi.org/project/django-notification-system/1.0.0/
+[docs]: https://django-notification-system.readthedocs.io/en/latest/
+[docs-ext]: https://django-notification-system.readthedocs.io/en/latest/extending.html
+[docs-util]: https://django-notification-system.readthedocs.io/en/latest/utility_functions.html
