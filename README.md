@@ -52,7 +52,7 @@ each Python and Django series.
 
 If you would like to add support for addition types of notifications that don't exist in the package yet, 
 you'll need to add the following items to your Django settings. We will cover these items in more detail
-in the [extending the system][docs-ext]. So just a quick intro here.
+in the [extending the system section of our docs][docs-ext]. So just a quick intro here.
 
 **Django Settings Additions**
         .. code-block:: python
