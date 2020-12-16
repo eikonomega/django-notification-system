@@ -29,7 +29,7 @@ Important: If You Have Custom Notification Targets
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 If you have created custom notification targets, you MUST have 
 created the appropriate handler modules. You can find about how 
-to do this here. [JUSTIN: LINK TO EXTENDING PAGE.]
+to do this :doc:`here. <../extending>`
 
 If this isn't done, no notifications for custom targets will be sent.
 
