@@ -25,12 +25,15 @@ class Command(BaseCommand):
 
         for user in all_users:
             # Calling this will create an email user target for each user.
-            TargetUserRecord.objects.update_or_create(
-                user=user,
-                target=email_target,
-                target_user_id=user.email,
-                defaults={
-                    "active": True,
-                    "description": f"{user.first_name} {user.last_name}'s Email",
-                },
-            )
+            if user.email:
+                TargetUserRecord.objects.update_or_create(
+                    user=user,
+                    target=email_target,
+                    target_user_id=user.email,
+                    defaults={
+                        "active": True,
+                        "description": f"{user.first_name} {user.last_name}'s Email",
+                    },
+                )
+            else:
+                print(f"{user.username} has no email address on record.")
