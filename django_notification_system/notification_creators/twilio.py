@@ -10,7 +10,7 @@ from django.utils import timezone
 from ..models import Notification
 from ..exceptions import (
     NotificationsNotCreated,
-    UserHasNoTargets,
+    UserHasNoTargetRecords,
     UserIsOptedOut,
 )
 
@@ -40,7 +40,7 @@ def create_notification(
 
     Raises:
         UserIsOptedOut: When the user has an active opt-out.
-        UserHasNoTargets: When the user has no eligible targets for this notification type.
+        UserHasNoTargetRecords: When the user has no eligible targets for this notification type.
         NotificationsNotCreated: When the notifications could not be created.
     """
     try:
@@ -57,7 +57,7 @@ def create_notification(
         if quiet:
             return
         else:
-            raise UserHasNoTargets()
+            raise UserHasNoTargetRecords()
 
     if scheduled_delivery is None:
         scheduled_delivery = timezone.now()

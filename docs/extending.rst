@@ -83,7 +83,7 @@ Let's start by writing our creator function.
             # Some common exceptions you might want to use.
             from django_notification_system.exceptions import (
                 NotificationsNotCreated,
-                UserHasNoTargets,
+                UserHasNoTargetRecords,
                 UserIsOptedOut,
             )
 
@@ -120,7 +120,7 @@ Let's start by writing our creator function.
 
                 Raises:
                     UserIsOptedOut: When the user has an active opt-out.
-                    UserHasNoTargets: When the user has no eligible targets for this notification type.
+                    UserHasNoTargetRecords: When the user has no eligible targets for this notification type.
                     NotificationsNotCreated: When the notifications could not be created.
                 """
 
@@ -147,7 +147,7 @@ Let's start by writing our creator function.
                     if quiet:
                         return
                     else:
-                        raise UserHasNoTargets()
+                        raise UserHasNoTargetRecords()
 
                 # Provide a default scheduled delivery if none is provided.
                 if scheduled_delivery is None:

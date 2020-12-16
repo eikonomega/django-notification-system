@@ -32,7 +32,7 @@ class UserIsOptedOut(NotificationNotSent):
         super().__init__("User is opted out")
 
 
-class UserHasNoTargets(NotificationNotSent):
+class UserHasNoTargetRecords(NotificationNotSent):
     """
     Exception to raise when a notification is not able to
     be sent because the user has no available targets.

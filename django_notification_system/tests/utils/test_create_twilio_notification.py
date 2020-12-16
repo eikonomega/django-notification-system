@@ -6,7 +6,7 @@ from django_notification_system.models import (
     Notification, NotificationTarget, TargetUserRecord, NotificationOptOut)
 from django_notification_system.notification_creators.twilio import (
     create_notification)
-from django_notification_system.exceptions import UserIsOptedOut, UserHasNoTargets
+from django_notification_system.exceptions import UserIsOptedOut, UserHasNoTargetRecords
 
 
 class TestCreateNotification(TestCase):
@@ -85,7 +85,7 @@ class TestCreateNotification(TestCase):
             create_notification(user=self.user_without_target,
                                 title="Wow",
                                 body="You really did it!")
-        except UserHasNoTargets:
+        except UserHasNoTargetRecords:
             pass
 
         post_function_notifications = Notification.objects.all()
