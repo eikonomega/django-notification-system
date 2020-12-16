@@ -1,4 +1,4 @@
-Django Notification System Models
+Package Models
 =================================
 There are 4 models that the library will install in your application.
 

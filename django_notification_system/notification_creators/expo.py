@@ -28,13 +28,14 @@ def create_notification(
     extra: dict = None,
 ) -> None:
     """
-    This function will generate an Expo push notification. Expo is a service
-    that is commonly used in React Native mobile development.
+    Generate an Expo push notification.
+
+    Expo is a service that is commonly used in React Native mobile development.
 
     Args:
         user (User): The user to whom the push notification will be sent.
         title (str): The title for the push notification.
-        body (str): [description]. The body of the push notification.
+        body (str): The body of the push notification.
         scheduled_delivery (datetime, optional): Defaults to immediately.
         retry_time_interval (int, optional): Delay between send attempts. Defaults to 60 seconds.
         max_retries (int, optional): Maximum number of retry attempts for delivery. Defaults to 3.
@@ -46,7 +47,6 @@ def create_notification(
         UserHasNoTargets: When the user has no eligible targets for this notification type.
         NotificationsNotCreated: When the notifications could not be created.
     """
-
     try:
         check_for_user_opt_out(user=user)
     except UserIsOptedOut:
@@ -55,7 +55,9 @@ def create_notification(
         else:
             raise UserIsOptedOut()
 
-    target_user_records = user_notification_targets(user=user, target_name="Expo")
+    target_user_records = user_notification_targets(
+        user=user, target_name="Expo"
+    )
 
     if not target_user_records:
         if quiet:

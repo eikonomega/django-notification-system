@@ -1,3 +1,4 @@
+"""A Django Notification System Handler."""
 from exponent_server_sdk import (
     PushClient,
     PushMessage,
@@ -12,7 +13,7 @@ from django.utils import timezone
 from ..utils import check_and_update_retry_attempts
 
 
-def send_notification(notification):
+def send_notification(notification) -> str:
     """
     Send push notifications (Expo) to the target device using the Expo server.
 
