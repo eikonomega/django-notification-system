@@ -58,7 +58,7 @@ class TestCommand(TestCase):
         self.user_target_twilio = TargetUserRecord.objects.create(
             user=self.user_with_notifications,
             target=NotificationTarget.objects.get(name='Twilio'),
-            target_user_id='6786676687',
+            target_user_id='6766676677',
             description='Test Phone #',
             active=True
         )
