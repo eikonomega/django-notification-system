@@ -118,7 +118,7 @@ FEAR NOT! In your terminal, run the command:
 .. parsed-literal::
         $ python manage.py create_email_target_user_records
 
-After the command has been run, navigate to ``http://yoursite/admin/django_notification_system/usertarget/``.
+After the command has been run, navigate to ``http://yoursite/admin/django_notification_system/targetuserrecord/``.
 You should see a newly created UserInNotificationTarget for each user currently 
 in the DB.
 
