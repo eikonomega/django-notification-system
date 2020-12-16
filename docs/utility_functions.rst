@@ -19,6 +19,13 @@ Natively Supported Notification Targets
 Email Notifications
 +++++++++++++++++++
 
+NOTE: To send emails, you will need to have the appropriate variables in your settings file. More information can be found |email_link|.
+We also have examples :doc:`here.  <../installation>`
+
+.. |email_link| raw:: html
+
+   <a href="https://docs.djangoproject.com/en/3.1/ref/settings/#email-backend" target="_blank">here</a>
+
 Notification Creator
 ####################
 
@@ -169,6 +176,10 @@ Notification Handler
 
 Twilio SMS
 ++++++++++
+
+NOTE: All Twilio phone numbers must contain a + and the country code. Therefore, all Twilio UserTargetRecords
+target_user_id should be `+{country_code}7891234567'. The sender number stored in the settings file should
+also follow this format.
 
 Notification Creator
 ####################

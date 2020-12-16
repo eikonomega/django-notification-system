@@ -17,10 +17,11 @@ def send_notification(notification):
         String: Whether the SMS has successfully sent, or an error message.
     """
     try:
-        twilio_account_sid = settings.TWILIO_ACCOUNT_SID
-        twilio_auth_token = settings.TWILIO_AUTH_TOKEN
+        twilio_settings = settings.NOTIFICATION_SYSTEM_TARGETS['twilio_sms']
+        twilio_account_sid = twilio_settings['account_sid']
+        twilio_auth_token = twilio_settings['auth_token']
 
-        twilio_sender = settings.TWILIO_SENDER
+        twilio_sender = twilio_settings['sender']
         twilio_receiver = notification.target_user_record.target_user_id
 
         client = Client(twilio_account_sid, twilio_auth_token)

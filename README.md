@@ -56,7 +56,17 @@ in the [extending the system section of our docs][docs-ext]. So just a quick int
 **Django Settings Additions**
 
 ```python
-INSTALLED_APPS = ["django_notification_system", ...]
+# You will need to add email information as specified here: https://docs.djangoproject.com/en/3.1/topics/email/
+# This can include:
+EMAIL_HOST = ''
+EMAIL_PORT = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+# and the EMAIL_USE_TLS and EMAIL_USE_SSL settings control whether a secure connection is used.
+
+INSTALLED_APPS = [
+    "django_notification_system", 
+    ...]
 # Add the following variables to your Django settings if
 # you want to write modules to support additional notification
 # types not included the library.
@@ -73,11 +83,18 @@ NOTIFICATION_SYSTEM_HANDLERS = [
     '/path/to/handler_modules',
     '/another/path/to/handler_modules']
 
-# Twilio Required settings, if you're not planning on using Twilio these can be set
-# to empty strings
-TWILIO_ACCOUNT_SID = 'FAKE_SID_FOR_DEMO_PURPOSES'
-TWILIO_AUTH_TOKEN = 'FAKE_TOKEN_FOR_DEMO_PURPOSES'
-TWILIO_SENDER = '+15555555555'
+NOTIFICATION_SYSTEM_TARGETS = {
+    # Twilio Required settings, if you're not planning on using Twilio these can be set
+    # to empty strings
+    "twilio_sms": {
+        'account_sid': '',
+        'auth_token': '',
+        'sender': '' # This is the phone number associated with the Twilio account
+    },
+    "email": {
+        'from_email': '' # Sending email address
+    }
+}
 ```
 
 [pypi-version]: https://img.shields.io/pypi/v/django-notification-system.svg

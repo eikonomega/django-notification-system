@@ -122,7 +122,13 @@ STATIC_URL = "/static/"
 
 NOTIFICATION_SYSTEM_HANDLERS = []
 NOTIFICATION_SYSTEM_CREATORS = []
-
-TWILIO_ACCOUNT_SID = ''
-TWILIO_AUTH_TOKEN = ''
-TWILIO_SENDER = ''
+NOTIFICATION_SYSTEM_TARGETS = {
+    "twilio_sms": {
+        'account_sid': '',
+        'auth_token': '',
+        'sender': '' # This is the phone number associated with the Twilio account
+    },
+    "email": {
+        'from_email': '' # Sending email address
+    }
+}

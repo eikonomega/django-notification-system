@@ -24,7 +24,7 @@ def send_notification(notification):
             subject=notification.title,
             message=html2text.html2text(notification.body),
             html_message=notification.body,
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=settings.NOTIFICATION_SYSTEM_TARGETS['email']['from_email'],
             recipient_list=[notification.target_user_record.target_user_id],
             fail_silently=False,
         )

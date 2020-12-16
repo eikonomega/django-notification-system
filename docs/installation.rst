@@ -20,6 +20,14 @@ Make the following additions to your Django settings.
 **Django Settings Additions**
         .. code-block:: python
 
+                # You will need to add email information as specified here: https://docs.djangoproject.com/en/3.1/topics/email/
+                # This can include:
+                EMAIL_HOST = ''
+                EMAIL_PORT = ''
+                EMAIL_HOST_USER = ''
+                EMAIL_HOST_PASSWORD = ''
+                # and the EMAIL_USE_TLS and EMAIL_USE_SSL settings control whether a secure connection is used.
+                
                 # Add the package to your installed apps.
                 INSTALLED_APPS = [
                     "django_notification_system",
@@ -29,10 +37,15 @@ Make the following additions to your Django settings.
                 # Twilio Required settings, if you're not planning on using Twilio 
                 # these can be set to empty strings
                 NOTIFICATION_SYSTEM_TARGETS={
-                  "twilioSMS": {
-                    "accountSID": "Your Twilio SID",
-                    "authToken": "Your Twilio Token",
-                    "sender": "Your Twilio Number"
+                  # Twilio Required settings, if you're not planning on using Twilio these can be set
+                  # to empty strings
+                  "twilio_sms": {
+                      'account_sid': '',
+                      'auth_token': '',
+                      'sender': '' # This is the phone number associated with the Twilio account
+                  },
+                  "email": {
+                      'from_email': '' # Sending email address
                   }
                 }
 
