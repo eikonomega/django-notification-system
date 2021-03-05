@@ -66,7 +66,7 @@ class Sender():
     def send_notification(self, notification_type, notification):
         return self.__function_table[notification_type](notification)
 
-    def execute(self, verbose=False, async_func=None):
+    def execute(self, verbose=False):
         # Get all SCHEDULED and RETRY notifications with a
         # scheduled_delivery before the current date_time
         notifications = Notification.objects.filter(
