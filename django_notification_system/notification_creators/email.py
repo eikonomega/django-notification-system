@@ -73,7 +73,7 @@ def create_notification(
     elif "template_name" in extra:
         # TODO: Look into how this function works and if we can just instruct people to include email templates in the TEMPLATE_DIRS setting.
         template = get_template(extra["template_name"])
-        email_body = template.render(**extra)
+        email_body = template.render(extra)
     else:
         raise ValueError(
             "You must either specify a `body` value or include 'template_name' in `extra` to create an email notification."
