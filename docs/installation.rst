@@ -34,6 +34,14 @@ Make the following additions to your Django settings.
                     ...
                 ]
 
+                # A list of locations for the system to search for notification creators.
+                # You can just create the list and leave it empty if you want to just put this in place.
+                NOTIFICATION_SYSTEM_CREATORS = []
+
+                # A list of locations for the system to search for notification handlers.
+                # You can just create the list and leave it empty if you want to just put this in place.
+                NOTIFICATION_SYSTEM_HANDLERS = []
+
                 # Twilio Required settings, if you're not planning on using Twilio 
                 # these can be set to empty strings
                 NOTIFICATION_SYSTEM_TARGETS={
