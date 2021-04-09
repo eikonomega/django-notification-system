@@ -45,6 +45,7 @@ class Notification(CreatedModifiedAbstractModel):
     OPTED_OUT = "OPTED OUT"
     RETRY = "RETRY"
     SCHEDULED = "SCHEDULED"
+    ASYNCED = "ASYNCED"
 
     STATUS_CHOICES = (
         (DELIVERED, "Delivered"),
@@ -53,6 +54,7 @@ class Notification(CreatedModifiedAbstractModel):
         (OPTED_OUT, "Opted Out"),
         (RETRY, "Retry"),
         (SCHEDULED, "Scheduled"),
+        (ASYNCED, "Asynced")
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
