@@ -33,30 +33,31 @@ class Command(BaseCommand):
         This function will get our function table populated with all available `send_notification`
         functions.
         """
-        for directory in settings.NOTIFICATION_SYSTEM_HANDLERS:
-            try:
-                for file in os.listdir(path.join(directory)):
-                    if "__init__" in file:
-                        # Ignore the init file
-                        continue
-                    try:
-                        # Create the module spec
-                        module_spec = importlib.util.spec_from_file_location(
-                            file, f"{directory}/{file}")
-                        # Create a new module  based  on the spec
-                        module = importlib.util.module_from_spec(module_spec)
-                        # An abstract method that executes the module
-                        module_spec.loader.exec_module(module)
-                        #  Get the actual function
-                        real_func = getattr(module, "send_notification")
-                        # Add it to our dictionary of functions
-                        notification_system = file.partition(".py")[0]
-                        cls.__function_table[notification_system] = real_func
-                    except (ModuleNotFoundError, AttributeError):
-                        pass
-            except FileNotFoundError:
-                # the directory provided in the settings file does not exist
-                pass
+        if hasattr(settings, "NOTIFICATION_SYSTEM_HANDLERS"):
+            for directory in settings.NOTIFICATION_SYSTEM_HANDLERS:
+                try:
+                    for file in os.listdir(path.join(directory)):
+                        if "__init__" in file:
+                            # Ignore the init file
+                            continue
+                        try:
+                            # Create the module spec
+                            module_spec = importlib.util.spec_from_file_location(
+                                file, f"{directory}/{file}")
+                            # Create a new module  based  on the spec
+                            module = importlib.util.module_from_spec(module_spec)
+                            # An abstract method that executes the module
+                            module_spec.loader.exec_module(module)
+                            #  Get the actual function
+                            real_func = getattr(module, "send_notification")
+                            # Add it to our dictionary of functions
+                            notification_system = file.partition(".py")[0]
+                            cls.__function_table[notification_system] = real_func
+                        except (ModuleNotFoundError, AttributeError):
+                            pass
+                except FileNotFoundError:
+                    # the directory provided in the settings file does not exist
+                    pass
 
     def handle(self, *args, **options):
         # Load the function table
