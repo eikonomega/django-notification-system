@@ -57,7 +57,7 @@ setup(
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'Django==3.1.3',
+        'Django>=3.1.3',
         'html2text==2018.1.9',
         'twilio==6.29.1',
         'exponent_server_sdk==0.3.1']
