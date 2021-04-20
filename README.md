@@ -18,7 +18,7 @@ a bit for future projects. Hopefully, it will help you too.
 
 **Here's the stuff you get:**
 
-1. A few Django models that are pretty important:
+1. A few Django models that are very important:
 
 - `Notification`: A single notification. Flexible enough to handle many different types of notifications.
 - `NotificationTarget`: A target for notifications. Email, SMS, etc.
