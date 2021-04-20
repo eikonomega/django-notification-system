@@ -61,5 +61,5 @@ setup(
         'html2text>=2018.1.9',
         'twilio>=6.29.1',
         'exponent_server_sdk>=0.3.1',
-        'dateutil>=2.8.1']
+        'python-dateutil>=2.8.1']
 )

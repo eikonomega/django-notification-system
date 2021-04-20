@@ -8,4 +8,4 @@ Sphinx==2.2.0                       # Documentation Tool
 sphinx-rtd-theme==0.4.3             # Sphinx Theme
 sphinxcontrib-httpdomain==1.7.0     # API plugin for Readthedocs
 
-dateutil==2.8.1
+python-dateutil==2.8.1
