@@ -23,7 +23,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.5.1',  # Required
+    version='1.5.2',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -58,7 +58,8 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'Django>=3.1.3',
-        'html2text==2018.1.9',
-        'twilio==6.29.1',
-        'exponent_server_sdk==0.3.1']
+        'html2text>=2018.1.9',
+        'twilio>=6.29.1',
+        'exponent_server_sdk>=0.3.1',
+        'python-dateutil>=2.8.1']
 )
