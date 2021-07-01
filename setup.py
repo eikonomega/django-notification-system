@@ -60,6 +60,6 @@ setup(
         'Django>=3.1.3',
         'html2text>=2018.1.9',
         'twilio>=6.29.1',
-        'exponent_server_sdk>=0.3.1',
+        'exponent_server_sdk>=1.0.2',
         'python-dateutil>=2.8.1']
 )
