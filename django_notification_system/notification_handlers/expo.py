@@ -2,7 +2,7 @@
 from exponent_server_sdk import (
     PushClient,
     PushMessage,
-    PushResponseError,
+    PushTicketError,
     PushServerError,
     DeviceNotRegisteredError,
 )
@@ -84,7 +84,7 @@ def handle_push_response(notification, response):
 
     Args:
         notification (Notification): The Expo push notification to be sent.
-        response (PushResponse): The Expo push response
+        response (PushTicket): The Expo push response
 
     Returns:
         str: Whether the push has successfully sent, or an error message.
@@ -99,7 +99,7 @@ def handle_push_response(notification, response):
         target_user_record.active = False
         target_user_record.save()
         return "{}: {}".format(type(e), e)
-    except PushResponseError as e:
+    except PushTicketError as e:
         check_and_update_retry_attempts(notification)
         return "{}: {}".format(type(e), e)
     else:

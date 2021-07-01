@@ -1,5 +1,5 @@
 from collections import namedtuple
-from exponent_server_sdk import PushResponseError, DeviceNotRegisteredError, MessageTooBigError, MessageRateExceededError, PushServerError, PushMessage, PushResponse
+from exponent_server_sdk import PushTicketError, DeviceNotRegisteredError, MessageTooBigError, MessageRateExceededError, PushServerError, PushMessage, PushTicket
 
 
 class MockPushClient(object):
@@ -54,11 +54,12 @@ class MockPushClient(object):
         receipts = []
         for i, message in enumerate(push_messages):
             payload = message.get_payload()
-            receipts.append(PushResponse(
+            receipts.append(PushTicket(
                 push_message=message,
-                status=PushResponse.SUCCESS_STATUS,
+                status=PushTicket.SUCCESS_STATUS,
                 message='',
-                details=None))
+                details=None,
+                id=id))
             if payload.get('sound', 'default') != 'default':
                 raise PushServerError('Request failed', {})
 
@@ -71,7 +72,7 @@ class MockPushClient(object):
             push_message: A single PushMessage object.
 
         Returns:
-           A PushResponse object which contains the results.
+           A PushTicket object which contains the results.
         """
         return self.publish_multiple([push_message])[0]
 
@@ -82,6 +83,6 @@ class MockPushClient(object):
             push_messages: An array of PushMessage objects.
 
         Returns:
-           An array of PushResponse objects which contains the results.
+           An array of PushTicket objects which contains the results.
         """
         return self._publish_internal(push_messages)

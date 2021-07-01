@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
-from exponent_server_sdk import PushResponse
+from exponent_server_sdk import PushTicket
 from six import StringIO
 
 from django_notification_system.models import (
@@ -369,11 +369,12 @@ class TestCommand(TestCase):
 
         """
         self.assertEqual(self.dev_user_target.active, True)
-        response = PushResponse(
+        response = PushTicket(
             push_message="",
-            status=PushResponse.ERROR_STATUS,
+            status=PushTicket.ERROR_STATUS,
             message='"adsf" is not a registered push notification recipient',
-            details={'error': PushResponse.ERROR_DEVICE_NOT_REGISTERED}
+            details={'error': PushTicket.ERROR_DEVICE_NOT_REGISTERED},
+            id=PushTicket.id
         )
         handle_push_response(self.dev_notification, response=response)
         self.dev_user_target.refresh_from_db()
