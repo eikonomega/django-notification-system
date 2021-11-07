@@ -88,6 +88,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='notification',
-            unique_together={('target_user_record', 'scheduled_delivery', 'title', 'extra')},
+            unique_together={('target_user_record', 'scheduled_delivery', 'title')},
         ),
     ]

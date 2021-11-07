@@ -78,7 +78,6 @@ class Notification(CreatedModifiedAbstractModel):
             "target_user_record",
             "scheduled_delivery",
             "title",
-            "extra",
         ]
 
     def __str__(self):
