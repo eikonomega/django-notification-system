@@ -58,4 +58,4 @@ class TargetUserRecord(CreatedModifiedAbstractModel):
         ]
 
     def __str__(self):
-        return "{}: {}".format(self.user.username, self.description)
+        return "{}: {}".format(self.user, self.description)

@@ -76,7 +76,7 @@ class Command(BaseCommand):
         # Loop through each notification and attempt to push it
         for notification in notifications:
             print(
-                f"{notification.target_user_record.user.username} - {notification.scheduled_delivery} - {notification.status}")
+                f"{notification.target_user_record.user} - {notification.scheduled_delivery} - {notification.status}")
             print(f"{notification.title} - {notification.body}")
 
             if not notification.target_user_record.active:

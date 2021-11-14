@@ -82,7 +82,7 @@ class Notification(CreatedModifiedAbstractModel):
 
     def __str__(self):
         return "{} - {} - {}".format(
-            self.target_user_record.user.username,
+            self.target_user_record.user,
             self.status,
             self.scheduled_delivery,
         )

@@ -36,4 +36,4 @@ class Command(BaseCommand):
                     },
                 )
             else:
-                print(f"{user.username} has no email address on record.")
+                print(f"{user} has no email address on record.")

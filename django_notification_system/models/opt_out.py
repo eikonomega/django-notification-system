@@ -36,7 +36,7 @@ class NotificationOptOut(CreatedModifiedAbstractModel):
         verbose_name_plural = "Notification Opt Outs"
 
     def __str__(self):
-        return self.user.username
+        return str(self.user)
 
     def save(self, *args, **kwargs):
         """
