@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-
-
 from django.apps import AppConfig
 
+default_app_config = "django_notification_system.Config"
 
-class Notifications(AppConfig):
-    name = 'Notifications'
+
+class Config(AppConfig):
+    name = "django_notification_system"
